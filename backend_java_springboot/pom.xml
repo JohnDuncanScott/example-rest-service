@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.duncan</groupId>
-    <artifactId>example-rest-service</artifactId>
+    <groupId>com.idm</groupId>
+    <artifactId>backend-rest-service</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
     <name>Example REST Service</name>

@@ -25,8 +25,14 @@ hs_err_pid*
 target
 
 # IntelliJ
-/.idea/
+.idea/
 *.iml
+
+# Maven
+.mvn/
 
 # Python
 __pycache__/
+
+# nodejs
+node_modules/
