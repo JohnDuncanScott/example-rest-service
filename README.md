@@ -76,6 +76,19 @@ easy to start with.
 * Browser
   * <https://github.com/vuejs/vue-devtools> (doesn't work in Edge, Chrome is fine)
 
+# Tips
+* REST
+  * [Complex searches](https://softwareengineering.stackexchange.com/questions/353086/what-is-a-proper-way-to-do-a-complex-restful-search-method)
+  * Assembling complex objects
+    * [Best example using HATEOS](https://softwareengineering.stackexchange.com/questions/327804/rest-api-handle-partial-nested-objects)
+    * [Performance-based discussion](http://blog.shippable.com/rest-api-best-practice-assemble-complex-objects-in-the-ui-layer)
+  * Spring HATEOS - making model representation easy
+    * [Official docs](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#reference)
+    * [Baeldung tutorial](https://www.baeldung.com/spring-hateoas-tutorial)
+    * [Comparison of REST and HATEOS](https://www.codingame.com/playgrounds/6723/applying-hateoas-to-a-rest-api-with-spring-boot)
+    * [What is "_embedded" in the request for collections?](https://stackoverflow.com/questions/27405637/meaning-and-usage-of-embedded-in-hateoas/27424771)
+    * [Why isn't .toCollectionModel working?](https://stackoverflow.com/questions/60635680/understanding-spring-hateoas-error-embedded-wrapper-returned-null-for-both-the)
+
 # Instructions
 * Requirements
   * Install [Java Development Kit 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) for your platform

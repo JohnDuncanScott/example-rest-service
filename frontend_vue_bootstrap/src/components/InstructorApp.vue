@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h1>Instructor Application</h1>
-    <ListCoursesComponent></ListCoursesComponent>
+    <h1>Product Package Application</h1>
+    <ProductPackages></ProductPackages>
   </div>
 </template>
 
 <script>
-import ListCoursesComponent from "./ListCoursesComponent";
+import ProductPackages from "./ProductPackages";
 export default {
-  name: "InstructorApp",
+  name: "ProductPackageApp",
   components: {
-    ListCoursesComponent
+    ProductPackages
   }
 };
 </script>

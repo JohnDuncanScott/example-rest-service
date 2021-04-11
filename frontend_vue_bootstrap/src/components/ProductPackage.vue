@@ -1,14 +1,18 @@
 <template>
   <div>
-    <h3>Course</h3>
+    <h3>Product Package</h3>
     <div class="container">
       <form @submit="validateAndSubmit">
         <div v-if="errors.length">
           <div class="alert alert-warning" v-bind:key="index" v-for="(error, index) in errors">{{error}}</div>
         </div>
         <fieldset class="form-group">
-          <label>Id</label>
-          <input type="text" class="form-control" v-model="id" disabled>
+          <label v-if="id">Id</label>
+          <input v-if="id" type="text" class="form-control" v-model="id" disabled>
+        </fieldset>
+        <fieldset class="form-group">
+          <label>Name</label>
+          <input type="text" class="form-control" v-model="name">
         </fieldset>
         <fieldset class="form-group">
           <label>Description</label>
@@ -21,57 +25,70 @@
 </template>
 
 <script>
-import CourseDataService from '../service/CourseDataService';
+import ProductPackageService from '../service/ProductPackageService';
 
 export default {
-  name: "courseDetails",
+  name: "ProductPackage",
   data() {
     return {
+      name: "",
       description: "",
-      INSTRUCTOR: "in28minutes",
       errors: []
     };
   },
   computed: {
     id() {
-      return this.$route.params.id;
+      var id = this.$route.params.id;
+
+      if (id === "-1") {
+        id = null;
+      }
+
+      return id;
     }
   },
   created() {
-    this.refreshCourseDetails();
+    this.refreshProductPackages();
   },
   methods: {
-    refreshCourseDetails() {
-        CourseDataService.retrieveCourse(this.INSTRUCTOR, this.id)
+    refreshProductPackages() {
+        ProductPackageService.getProductPackage(this.id)
           .then(res => {
+            this.name = res.data.name;
             this.description = res.data.description;
           });
     },
     validateAndSubmit(e) {
         e.preventDefault();
         this.errors = [];
+
         if(!this.description) {
             this.errors.push("Enter valid values");
         } else if(this.description.length < 5) {
-            this.errors.push("Enter atleast 5 characters in Description");
+            this.errors.push("Enter at least 5 characters in Description");
         }
 
         if(this.errors.length === 0) {
-            if (this.id === -1) {
-                CourseDataService.createCourse(this.INSTRUCTOR, {
+            if (this.id === null) {
+                ProductPackageService.createProductPackage({
+                    id: null,
+                    name: this.name,
                     description: this.description
-                })
-                .then(() => {
-                    this.$router.push('/courses');
-                });
+                  })
+                  .then(() => {
+                      this.$router.push('/packages');
+                  });
             } else {
-                CourseDataService.updateCourse(this.INSTRUCTOR, this.id, {
+                ProductPackageService.updateProductPackage(
+                  this.id,
+                  {
                     id: this.id,
+                    name: this.name,
                     description: this.description
-                })
-                .then(() => {
-                    this.$router.push('/courses');
-                });
+                  })
+                  .then(() => {
+                      this.$router.push('/packages');
+                  });
             }
         }
     }
