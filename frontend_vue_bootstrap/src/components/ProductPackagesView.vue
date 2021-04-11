@@ -9,6 +9,7 @@
         <tbody>
           <tr v-for="productPackage in filteredProductPackages" v-bind:key="productPackage.id">
             <td>{{productPackage.name}}</td>
+            <td>{{getCurrencySymbol(productPackage.localCurrency)}}{{productPackage.totalLocalPrice}}</td>
             <td><button class="btn btn-info" v-on:click="viewProductPackage(productPackage.id)">Details</button></td>
             <td><button class="btn btn-success">Add to cart</button></td>
           </tr>
@@ -22,6 +23,7 @@
 import { VIEW_PACKAGE_ROUTE } from '../routes';
 import ProductPackageService from '../service/ProductPackageService';
 import TheHeader from './TheHeader.vue';
+import getSymbolFromCurrency from 'currency-symbol-map'
 export default {
   components: { TheHeader },
   name: "ProductPackagesView",
@@ -53,6 +55,9 @@ export default {
     },
     viewProductPackage(id) {
       this.$router.push({ name: VIEW_PACKAGE_ROUTE, params: { id: id } });
+    },
+    getCurrencySymbol(currencyCode) {
+      return getSymbolFromCurrency(currencyCode);
     }
   },
   created() {
