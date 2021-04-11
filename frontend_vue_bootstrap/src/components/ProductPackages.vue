@@ -62,7 +62,7 @@ export default {
       this.$router.push(`/packages/${id}`);
     },
     addProductPackage() {
-      this.$router.push(`/packages/-1`);
+      this.$router.push(`/packages/new`);
     }
   },
   created() {

@@ -40,7 +40,7 @@ export default {
     id() {
       var id = this.$route.params.id;
 
-      if (id === "-1") {
+      if (id === "new") {
         id = null;
       }
 

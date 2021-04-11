@@ -18,7 +18,12 @@ const router = new Router({
     },
     {
       path: "/packages/:id",
-      name: "Product package details",
+      name: "Edit product package details",
+      component: () => import("./components/ProductPackage")
+    },
+    {
+      path: "/packages/new",
+      name: "New product package",
       component: () => import("./components/ProductPackage")
     }
   ]
