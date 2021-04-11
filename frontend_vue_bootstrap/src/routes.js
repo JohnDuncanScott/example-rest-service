@@ -7,6 +7,7 @@ export const HOME_ROUTE = "Home";
 export const PACKAGES_ROUTE = "Packages";
 export const EDIT_PACKAGE_ROUTE = "EditPackage";
 export const NEW_PACKAGE_ROUTE = "NewPackage";
+export const VIEW_PACKAGE_ROUTE = "ViewPackage";
 
 const router = new Router({
   mode: "history", // Use browser history
@@ -14,22 +15,27 @@ const router = new Router({
     {
       path: "/",
       name: HOME_ROUTE,
-      component: () => import("./components/EditProductPackages")
+      component: () => import("./components/ProductPackagesView")
     },
     {
       path: "/admin/packages",
       name: PACKAGES_ROUTE,
-      component: () => import("./components/EditProductPackages")
+      component: () => import("./components/ProductPackagesEdit")
     },
     {
       path: "/admin/packages/:id",
       name: EDIT_PACKAGE_ROUTE,
-      component: () => import("./components/EditProductPackage")
+      component: () => import("./components/ProductPackageEdit")
     },
     {
       path: "/admin/packages/new",
       name: NEW_PACKAGE_ROUTE,
-      component: () => import("./components/EditProductPackage")
+      component: () => import("./components/ProductPackageEdit")
+    },
+    {
+      path: "/packages/:id",
+      name: VIEW_PACKAGE_ROUTE,
+      component: () => import("./components/ProductPackageView")
     }
   ]
 });

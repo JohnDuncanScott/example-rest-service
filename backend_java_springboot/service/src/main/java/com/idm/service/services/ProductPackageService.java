@@ -2,11 +2,14 @@ package com.idm.service.services;
 
 import com.idm.service.models.data.Product;
 import com.idm.service.models.data.ProductPackage;
+import com.idm.service.models.data.ProductPackageInstant;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,17 +46,23 @@ public class ProductPackageService {
     @Autowired
     private ProductService productService;
 
-    public List<ProductPackage> getAll() {
+    @Autowired
+    private ExchangeRateService exchangeRateService;
+
+    public List<ProductPackageInstant> getAll(@NonNull Currency currency) {
         log.info("Found product packages, size: {}", productPackagesMap.size());
-        return new ArrayList<>(productPackagesMap.values());
+
+        return productPackagesMap.values().stream()
+                .map(p -> toProductPackageInstant(p, currency))
+                .collect(Collectors.toList());
     }
 
-    public ProductPackage getById(@NonNull String id) {
+    public ProductPackageInstant getById(@NonNull String id, @NonNull Currency currency) {
         ProductPackage productPackage = productPackagesMap.get(id);
 
         if (productPackage != null) {
             log.info("Product package found: {}", productPackage);
-            return productPackage;
+            return toProductPackageInstant(productPackage, currency);
         }
 
         logNothingFound(id);
@@ -61,11 +70,11 @@ public class ProductPackageService {
         return null;
     }
 
-    public List<Product> getProductsForPackage(@NonNull String packageId) {
-        ProductPackage productPackage = getById(packageId);
+    public List<Product> getProductsForPackage(@NonNull String packageId, @NonNull Currency currency) {
+        ProductPackageInstant productPackage = getById(packageId, currency);
 
         if (productPackage != null) {
-            return productPackage.getProductIds().stream()
+            return productPackage.getProductPackage().getProductIds().stream()
                     .map(productId -> productService.getById(productId))
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
@@ -74,11 +83,14 @@ public class ProductPackageService {
         return Collections.EMPTY_LIST;
     }
 
-    public Product getProductForPackage(@NonNull String packageId, @NonNull String productId) {
-        ProductPackage productPackage = getById(packageId);
+    public Product getProductForPackage(
+            @NonNull String packageId,
+            @NonNull String productId,
+            @NonNull Currency currency) {
+        ProductPackageInstant productPackageInstant = getById(packageId, currency);
 
-        if (productPackage != null) {
-            if (!productPackage.getProductIds().contains(productId)) {
+        if (productPackageInstant != null) {
+            if (!productPackageInstant.getProductPackage().getProductIds().contains(productId)) {
                 log.info("Could not find product id '{}' in package with id '{}'", productId, packageId);
                 return null;
             }
@@ -96,21 +108,24 @@ public class ProductPackageService {
         return null;
     }
 
-    public ProductPackage deleteById(@NonNull String id) {
+    public boolean deleteById(@NonNull String id) {
         ProductPackage productPackage = productPackagesMap.remove(id);
 
         if (productPackage != null) {
             log.info("Removed product package, id: {}", id);
-            return productPackage;
+            return true;
         }
 
         log.info("Could not remove product package, id not found: {}", id);
 
-        return null;
+        return false;
     }
 
-    public ProductPackage save(@NonNull ProductPackage productPackage) {
+    public ProductPackageInstant save(
+            @NonNull ProductPackage productPackage,
+            @NonNull Currency currency) {
         if (productPackage.getId() == null) {
+            // TODO: Not thread safe
             productPackage.setId(Integer.toString(++idCounter));
             productPackagesMap.put(productPackage.getId(), productPackage);
             log.info("Added new product package: {}", productPackage);
@@ -120,7 +135,24 @@ public class ProductPackageService {
             log.info("Updated product package: {}", productPackage);
         }
 
-        return productPackage;
+        return toProductPackageInstant(productPackage, currency);
+    }
+
+    // TODO: Pricing concerns and conversions should probably be in a separate class since you don't always
+    // need to do an exchange unless you're displaying to the customer
+    private ProductPackageInstant toProductPackageInstant(ProductPackage productPackage, Currency localCurrency) {
+        BigDecimal totalUsdPrice = productPackage.getProductIds().stream()
+                .map(productId -> productService.getById(productId))
+                .map(Product::getUsdPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new ProductPackageInstant(
+                productPackage,
+                totalUsdPrice,
+                localCurrency,
+                exchangeRateService.getExchangeRateForUsdTo(localCurrency),
+                Instant.now()
+        );
     }
 
     private void logNothingFound(String id) {

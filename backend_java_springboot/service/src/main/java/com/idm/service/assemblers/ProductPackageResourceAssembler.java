@@ -2,6 +2,7 @@ package com.idm.service.assemblers;
 
 import com.idm.service.controllers.ProductPackageController;
 import com.idm.service.models.data.ProductPackage;
+import com.idm.service.models.data.ProductPackageInstant;
 import com.idm.service.models.resources.ProductPackageResource;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -10,14 +11,12 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 
 import javax.annotation.Nullable;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Slf4j
-public class ProductPackageResourceAssembler extends RepresentationModelAssemblerSupport<ProductPackage, ProductPackageResource> {
+public class ProductPackageResourceAssembler
+        extends RepresentationModelAssemblerSupport<ProductPackageInstant, ProductPackageResource> {
     public ProductPackageResourceAssembler() {
         super(ProductPackageController.class, ProductPackageResource.class);
     }
@@ -31,8 +30,8 @@ public class ProductPackageResourceAssembler extends RepresentationModelAssemble
     // Will handle both new objects that need creating and transferring data from existing ones
     public ProductPackage fromModel(
             @NonNull ProductPackageResource productPackageResource,
-            @Nullable ProductPackage originalProductPackage) {
-        boolean isOriginalProductPackagePresent = originalProductPackage != null;
+            @Nullable ProductPackageInstant originalProductPackageInstant) {
+        boolean isOriginalProductPackagePresent = originalProductPackageInstant != null;
 
         if (!isOriginalProductPackagePresent && productPackageResource.getId() != null) {
             log.info(
@@ -42,10 +41,10 @@ public class ProductPackageResourceAssembler extends RepresentationModelAssemble
 
         if (isOriginalProductPackagePresent) {
             return new ProductPackage(
-                    originalProductPackage.getId(),
+                    originalProductPackageInstant.getProductPackage().getId(),
                     productPackageResource.getName(),
                     productPackageResource.getDescription(),
-                    originalProductPackage.getProductIds()
+                    originalProductPackageInstant.getProductPackage().getProductIds()
             );
         } else {
             return new ProductPackage(
@@ -56,20 +55,27 @@ public class ProductPackageResourceAssembler extends RepresentationModelAssemble
     }
 
     @Override
-    public ProductPackageResource toModel(@NonNull ProductPackage productPackage) {
-        ProductPackageResource resource = this.createModelWithId(productPackage.getId(), productPackage);
+    public ProductPackageResource toModel(@NonNull ProductPackageInstant productPackageInstant) {
+        ProductPackageResource resource = this.createModelWithId(
+                productPackageInstant.getProductPackage().getId(), productPackageInstant);
         Link productsLink = linkTo(methodOn(ProductPackageController.class)
-                .getProductsForPackage(productPackage.getId())).withRel("products");
+                .getProductsForPackage(
+                        productPackageInstant.getProductPackage().getId(),
+                        productPackageInstant.getLocalCurrency().getCurrencyCode())).withRel("products");
         resource.add(productsLink);
 
         return resource;
     }
 
     @Override
-    protected ProductPackageResource instantiateModel(ProductPackage entity) {
+    protected ProductPackageResource instantiateModel(ProductPackageInstant productPackageInstant) {
+        ProductPackage productPackage = productPackageInstant.getProductPackage();
+
         return new ProductPackageResource(
-                entity.getId(),
-                entity.getName(),
-                entity.getDescription());
+                productPackage.getId(),
+                productPackage.getName(),
+                productPackage.getDescription(),
+                productPackageInstant.getLocalCurrency(),
+                productPackageInstant.getTotalLocalPrice());
     }
 }

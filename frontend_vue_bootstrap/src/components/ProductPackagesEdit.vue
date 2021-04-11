@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h3>All Product Packages</h3>
+    <h3>Product Packages Admin</h3>
     <div v-if="message" class="alert alert-success">{{this.message}}</div>
     <div class="container">
       <table class="table">
@@ -34,7 +34,7 @@
 import { NEW_PACKAGE_ROUTE, EDIT_PACKAGE_ROUTE } from '../routes';
 import ProductPackageService from '../service/ProductPackageService';
 export default {
-  name: "ProductPackages",
+  name: "ProductPackagesEdit",
   data() {
     return {
       productPackages: [],

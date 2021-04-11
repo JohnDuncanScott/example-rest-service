@@ -88,6 +88,8 @@ easy to start with.
     * [Comparison of REST and HATEOS](https://www.codingame.com/playgrounds/6723/applying-hateoas-to-a-rest-api-with-spring-boot)
     * [What is "_embedded" in the request for collections?](https://stackoverflow.com/questions/27405637/meaning-and-usage-of-embedded-in-hateoas/27424771)
     * [Why isn't .toCollectionModel working?](https://stackoverflow.com/questions/60635680/understanding-spring-hateoas-error-embedded-wrapper-returned-null-for-both-the)
+* Vue
+  * [Style guide](https://vuejs.org/v2/style-guide/)
 
 # Instructions
 * Requirements

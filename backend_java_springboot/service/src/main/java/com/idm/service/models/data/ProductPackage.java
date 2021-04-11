@@ -1,22 +1,27 @@
 package com.idm.service.models.data;
 
-import lombok.*;
+import com.google.common.collect.ImmutableSet;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.Value;
+import lombok.experimental.NonFinal;
 import org.apache.commons.lang3.StringUtils;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
 // TODO: For simplicity, a package can only contain a unique set of products
-@Data
+@Value
 public class ProductPackage {
-    // A null id indicates an id needs to be generated
+    // TODO: A null id indicates an id needs to be generated, having something mutable on an immutable object
+    // is a code smell, but for simplicity, going down this route
+    @NonFinal
+    @Setter
     private String id;
     @NonNull private String name;
     @NonNull private String description;
-    @NonNull private Set<String> productIds = new HashSet<>();
+    @NonNull private Set<String> productIds;
 
     // Use when creating a fresh object that will later have its id populated and associated data populated
     public ProductPackage(@NonNull String name, @NonNull String description) {
@@ -25,6 +30,7 @@ public class ProductPackage {
 
         this.name = name;
         this.description = description;
+        this.productIds = ImmutableSet.of();
     }
 
     // Standard constructor for most use cases
@@ -40,7 +46,7 @@ public class ProductPackage {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.productIds = productIds;
+        this.productIds = ImmutableSet.copyOf(productIds);
     }
 
     private void checkNotBlank(String value, String argumentName) {

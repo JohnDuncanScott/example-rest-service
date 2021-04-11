@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Product Package</h3>
+    <h3>Product Package Admin</h3>
     <div class="container">
       <form @submit="validateAndSubmit">
         <div v-if="errors.length">
@@ -29,7 +29,7 @@ import { PACKAGES_ROUTE } from '../routes';
 import ProductPackageService from '../service/ProductPackageService';
 
 export default {
-  name: "ProductPackage",
+  name: "ProductPackageEdit",
   data() {
     return {
       name: "",
@@ -49,10 +49,10 @@ export default {
     }
   },
   created() {
-    this.refreshProductPackages();
+    this.refreshProductPackage();
   },
   methods: {
-    refreshProductPackages() {
+    refreshProductPackage() {
         ProductPackageService.getProductPackage(this.id)
           .then(res => {
             this.name = res.data.name;
