@@ -3,28 +3,33 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
+export const HOME_ROUTE = "Home";
+export const PACKAGES_ROUTE = "Packages";
+export const EDIT_PACKAGE_ROUTE = "EditPackage";
+export const NEW_PACKAGE_ROUTE = "NewPackage";
+
 const router = new Router({
   mode: "history", // Use browser history
   routes: [
     {
       path: "/",
-      name: "Home",
-      component: () => import("./components/ProductPackages")
+      name: HOME_ROUTE,
+      component: () => import("./components/EditProductPackages")
     },
     {
-      path: "/packages",
-      name: "Product packages",
-      component: () => import("./components/ProductPackages")
+      path: "/admin/packages",
+      name: PACKAGES_ROUTE,
+      component: () => import("./components/EditProductPackages")
     },
     {
-      path: "/packages/:id",
-      name: "Edit product package details",
-      component: () => import("./components/ProductPackage")
+      path: "/admin/packages/:id",
+      name: EDIT_PACKAGE_ROUTE,
+      component: () => import("./components/EditProductPackage")
     },
     {
-      path: "/packages/new",
-      name: "New product package",
-      component: () => import("./components/ProductPackage")
+      path: "/admin/packages/new",
+      name: NEW_PACKAGE_ROUTE,
+      component: () => import("./components/EditProductPackage")
     }
   ]
 });

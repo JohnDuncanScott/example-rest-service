@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { PACKAGES_ROUTE } from '../routes';
 import ProductPackageService from '../service/ProductPackageService';
 
 export default {
@@ -76,7 +77,7 @@ export default {
                     description: this.description
                   })
                   .then(() => {
-                      this.$router.push('/packages');
+                      this.$router.push({ name: PACKAGES_ROUTE });
                   });
             } else {
                 ProductPackageService.updateProductPackage(
@@ -87,7 +88,7 @@ export default {
                     description: this.description
                   })
                   .then(() => {
-                      this.$router.push('/packages');
+                      this.$router.push({ name: PACKAGES_ROUTE });
                   });
             }
         }

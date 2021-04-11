@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { NEW_PACKAGE_ROUTE, EDIT_PACKAGE_ROUTE } from '../routes';
 import ProductPackageService from '../service/ProductPackageService';
 export default {
   name: "ProductPackages",
@@ -59,10 +60,10 @@ export default {
         });
     },
     updateProductPackage(id) {
-      this.$router.push(`/packages/${id}`);
+      this.$router.push({ name: EDIT_PACKAGE_ROUTE, params: { id: id } });
     },
     addProductPackage() {
-      this.$router.push(`/packages/new`);
+      this.$router.push({ name: NEW_PACKAGE_ROUTE });
     }
   },
   created() {
