@@ -3,6 +3,7 @@ package com.idm.service.models.data;
 import lombok.Value;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.Currency;
 
@@ -15,6 +16,6 @@ public class ProductPackageInstant {
     Instant exchangeRateRetrievalTime;
 
     public BigDecimal getTotalLocalPrice() {
-        return totalUsdPrice.multiply(localExchangeRate);
+        return totalUsdPrice.multiply(localExchangeRate).setScale(2, RoundingMode.HALF_EVEN);
     }
 }

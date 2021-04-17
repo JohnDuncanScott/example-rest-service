@@ -1,0 +1,1 @@
+export const CURRENCY_CHANGED_EVENT = "currency_changed";

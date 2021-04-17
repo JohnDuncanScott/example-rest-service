@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <TheHeader/>
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-search" v-model="search">
     </div>
@@ -22,14 +21,14 @@
 <script>
 import { VIEW_PACKAGE_ROUTE } from '../routes';
 import ProductPackageService from '../service/ProductPackageService';
-import TheHeader from './TheHeader.vue';
 import getSymbolFromCurrency from 'currency-symbol-map'
+import { CURRENCY_CHANGED_EVENT } from '../events'
 export default {
-  components: { TheHeader },
   name: "ProductPackagesView",
   data() {
     return {
       search: "",
+      currencyCode: "",
       productPackages: []
     };
   },
@@ -44,7 +43,7 @@ export default {
   },
   methods: {
     refreshProductPackages() {
-      ProductPackageService.getAllProductPackages()
+      ProductPackageService.getAllProductPackages(this.currencyCode)
         .then(response => {
           if (response.data._embedded?.productPackageResourceList) {
             this.productPackages = response.data._embedded.productPackageResourceList;
@@ -62,6 +61,12 @@ export default {
   },
   created() {
     this.refreshProductPackages();
+  },
+  mounted() {
+    this.$root.$on(CURRENCY_CHANGED_EVENT, (currencyCode) => {
+      this.currencyCode = currencyCode
+      this.refreshProductPackages()
+    });
   }
 };
 </script>

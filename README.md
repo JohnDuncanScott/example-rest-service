@@ -90,6 +90,7 @@ easy to start with.
     * [Why isn't .toCollectionModel working?](https://stackoverflow.com/questions/60635680/understanding-spring-hateoas-error-embedded-wrapper-returned-null-for-both-the)
 * Vue
   * [Style guide](https://vuejs.org/v2/style-guide/)
+  * [Cross component communication](https://medium.com/js-dojo/component-communication-in-vue-js-ca8b591d7efa)
 
 # Instructions
 * Requirements
@@ -100,3 +101,7 @@ easy to start with.
   * cd frontend_vue_bootstrap
   * npm install
   * npm run serve
+
+* Web page
+  * Go to http://localhost:8081/ for customer facing end
+  * Go to http://localhost:8081/admin/packages for admin side

@@ -2,12 +2,17 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col">Welcome to the shop!</div>
+        <div class="col-1">
+          Currency:
+        </div>
         <div class="col-2">
-          <select class="form-select" aria-label="Currency selection" v-model="currency">
-            <option selected value="USD">USD</option>
-            <option value="GBP">GBP</option>
-            <option value="EUR">EUR</option>
-          </select>
+          <keep-alive>
+            <select class="form-select" aria-label="Currency selection" v-model="currencyCode" @change="onCurrencyChange()">
+              <option selected value="USD">USD</option>
+              <option value="GBP">GBP</option>
+              <option value="EUR">EUR</option>
+            </select>
+          </keep-alive>
         </div>
         <div class="col-1">
           <button type="button" class="btn btn-primary">
@@ -29,16 +34,24 @@
 
 <script>
 import getSymbolFromCurrency from 'currency-symbol-map'
+import { CURRENCY_CHANGED_EVENT } from '../events'
 export default {
   name: "TheHeader",
   data() {
     return {
-      currency: "USD"
+      currencyCode: "USD"
     };
   },
   computed: {
     currencySymbol() {
-      return getSymbolFromCurrency(this.currency);
+      return getSymbolFromCurrency(this.currencyCode);
+    },
+  },
+  methods: {
+    onCurrencyChange() {
+      console.log(`Currency changed: ${this.currencyCode}`)
+      console.log(CURRENCY_CHANGED_EVENT)
+      this.$root.$emit(CURRENCY_CHANGED_EVENT, this.currencyCode)
     }
   }
 };

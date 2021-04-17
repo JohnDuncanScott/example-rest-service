@@ -138,7 +138,7 @@ public class ProductPackageService {
         return toProductPackageInstant(productPackage, currency);
     }
 
-    // TODO: Pricing concerns and conversions should probably be in a separate class since you don't always
+    // TODO: Pricing concerns and conversions should probably be in a separate class since you don't necessarily
     // need to do an exchange unless you're displaying to the customer
     private ProductPackageInstant toProductPackageInstant(ProductPackage productPackage, Currency localCurrency) {
         BigDecimal totalUsdPrice = productPackage.getProductIds().stream()
