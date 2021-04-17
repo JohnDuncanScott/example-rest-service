@@ -7,15 +7,15 @@
         </div>
         <div class="col-2">
           <keep-alive>
-            <select class="form-select" aria-label="Currency selection" v-model="currencyCode" @change="onCurrencyChange()">
-              <option selected value="USD">USD</option>
+            <select class="form-select" aria-label="Currency selection" v-model="currencyCodeFromDropdown" @change="onCurrencyChange()">
+              <option value="USD">USD</option>
               <option value="GBP">GBP</option>
               <option value="EUR">EUR</option>
             </select>
           </keep-alive>
         </div>
         <div class="col-1">
-          <button type="button" class="btn btn-primary">
+          <button type="button" class="btn btn-primary" v-on:click="viewBasket()">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -33,26 +33,44 @@
 </template>
 
 <script>
-import getSymbolFromCurrency from 'currency-symbol-map'
-import { CURRENCY_CHANGED_EVENT } from '../events'
+import { VIEW_BASKET_ROUTE } from '../routes';
+import getSymbolFromCurrency from 'currency-symbol-map';
+import { CURRENCY_CHANGED_EVENT } from '../events';
+import UserPersonalisationService from '../service/UserPersonalisationService';
+import CURRENCY_CODE_KEY from '../service/UserPersonalisationService';
 export default {
   name: "TheHeader",
   data() {
     return {
-      currencyCode: "USD"
+      currencyCodeFromDropdown: ""
     };
   },
   computed: {
     currencySymbol() {
-      return getSymbolFromCurrency(this.currencyCode);
-    },
+      return getSymbolFromCurrency(this.currencyCodeFromDropdown);
+    }
   },
   methods: {
     onCurrencyChange() {
-      console.log(`Currency changed: ${this.currencyCode}`)
+      console.log(`Currency changed: ${this.currencyCodeFromDropdown}`)
       console.log(CURRENCY_CHANGED_EVENT)
-      this.$root.$emit(CURRENCY_CHANGED_EVENT, this.currencyCode)
-    }
+      UserPersonalisationService.storeValue(CURRENCY_CODE_KEY, this.currencyCodeFromDropdown);
+      this.$root.$emit(CURRENCY_CHANGED_EVENT, this.currencyCodeFromDropdown)
+    },
+    viewBasket() {
+      this.$router.push({ name: VIEW_BASKET_ROUTE });
+    },
+  },
+  created() {
+      var currencyCode = UserPersonalisationService.getValue(CURRENCY_CODE_KEY);
+
+      if (!currencyCode) {
+        // Match defaults for API. You would probably do this based on location in a real product
+        currencyCode = "USD";
+        UserPersonalisationService.storeValue(CURRENCY_CODE_KEY, currencyCode);
+      }
+
+      this.currencyCodeFromDropdown = currencyCode;
   }
 };
 </script>

@@ -91,6 +91,8 @@ easy to start with.
 * Vue
   * [Style guide](https://vuejs.org/v2/style-guide/)
   * [Cross component communication](https://medium.com/js-dojo/component-communication-in-vue-js-ca8b591d7efa)
+  * [Getting Vue to react to property deletion](https://stackoverflow.com/questions/50782129/deleting-an-object-by-key-doesnt-update-the-vue-component)
+  * [Remember to unregister event listeners](https://www.fatalerrors.org/a/remember-to-remove-the-event-listener-bound-with-on-in-vue.html)
 
 # Instructions
 * Requirements

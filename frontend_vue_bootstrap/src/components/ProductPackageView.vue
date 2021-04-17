@@ -1,16 +1,24 @@
 <template>
   <div class="container">
-    <h3>Name</h3>
-    <div>{{this.name}}</div>
-    <h3>Description</h3>
-    <div>{{this.description}}</div>
-    <h3>Price</h3>
-    <div>{{getCurrencySymbol(this.localCurrency)}}{{this.totalLocalPrice}}</div>
+    <h6>Name</h6>
+    <div>{{this.productPackage.name}}</div>
+    <h6>Description</h6>
+    <div>{{this.productPackage.description}}</div>
+    <h6>Contents</h6>
+    <div v-for="product in productPackage.products" v-bind:key="product.id">
+      <div>{{product.name}}</div>
+    </div>
+    <h6>Package Price</h6>
+    <div>{{getCurrencySymbol(this.productPackage.localCurrency)}}{{this.productPackage.totalLocalPrice}}</div>
+    <button class="btn btn-success" v-on:click="addToBasket()">Add to cart</button>
   </div>
 </template>
 
 <script>
 import ProductPackageService from '../service/ProductPackageService';
+import UserPersonalisationService from '../service/UserPersonalisationService';
+import BasketService from '../service/BasketService';
+import CURRENCY_CODE_KEY from '../service/UserPersonalisationService';
 import getSymbolFromCurrency from 'currency-symbol-map'
 import { CURRENCY_CHANGED_EVENT } from '../events'
 export default {
@@ -18,40 +26,37 @@ export default {
   data() {
     return {
       currencyCode: "",
-      name: "",
-      description: "",
-      totalLocalPrice: 0
+      productPackage: {}
     };
   },
   computed: {
     id() {
-      var id = this.$route.params.id;
-
-      if (id === "new") {
-        id = null;
-      }
-
-      return id;
+      return this.$route.params.id;
     }
   },
   created() {
+    this.currencyCode = UserPersonalisationService.getValue(CURRENCY_CODE_KEY);
     this.refreshProductPackage();
   },
   mounted() {
-    this.$root.$on(CURRENCY_CHANGED_EVENT, (currencyCode) => {
-      this.currencyCode = currencyCode
+    this.$root.$on(CURRENCY_CHANGED_EVENT, (currencyCodeFromDropdown) => {
+      this.currencyCode = currencyCodeFromDropdown
       this.refreshProductPackage()
     });
+  },
+  beforeDestroy() {
+    this.$root.$off(CURRENCY_CHANGED_EVENT)
   },
   methods: {
     refreshProductPackage() {
         ProductPackageService.getProductPackage(this.id, this.currencyCode)
           .then(res => {
-            this.name = res.data.name;
-            this.description = res.data.description;
-            this.localCurrency = res.data.localCurrency;
-            this.totalLocalPrice = res.data.totalLocalPrice;
+            this.productPackage = res.data;
           });
+    },
+    addToBasket() {
+      console.log(`Adding package to basket, id: ${this.productPackage.id}`)
+      BasketService.addProductPackage(this.productPackage)
     },
     getCurrencySymbol(currencyCode) {
       return getSymbolFromCurrency(currencyCode);

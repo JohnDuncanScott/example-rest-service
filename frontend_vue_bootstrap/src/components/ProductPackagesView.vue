@@ -10,7 +10,7 @@
             <td>{{productPackage.name}}</td>
             <td>{{getCurrencySymbol(productPackage.localCurrency)}}{{productPackage.totalLocalPrice}}</td>
             <td><button class="btn btn-info" v-on:click="viewProductPackage(productPackage.id)">Details</button></td>
-            <td><button class="btn btn-success">Add to cart</button></td>
+            <td><button class="btn btn-success" v-on:click="addToBasket(productPackage)">Add to cart</button></td>
           </tr>
         </tbody>
       </table>
@@ -21,6 +21,9 @@
 <script>
 import { VIEW_PACKAGE_ROUTE } from '../routes';
 import ProductPackageService from '../service/ProductPackageService';
+import BasketService from '../service/BasketService';
+import UserPersonalisationService from '../service/UserPersonalisationService';
+import CURRENCY_CODE_KEY from '../service/UserPersonalisationService';
 import getSymbolFromCurrency from 'currency-symbol-map'
 import { CURRENCY_CHANGED_EVENT } from '../events'
 export default {
@@ -55,18 +58,26 @@ export default {
     viewProductPackage(id) {
       this.$router.push({ name: VIEW_PACKAGE_ROUTE, params: { id: id } });
     },
+    addToBasket(productPackage) {
+      console.log(`Adding package to basket, id: ${productPackage.id}`)
+      BasketService.addProductPackage(productPackage)
+    },
     getCurrencySymbol(currencyCode) {
       return getSymbolFromCurrency(currencyCode);
     }
   },
   created() {
+    this.currencyCode = UserPersonalisationService.getValue(CURRENCY_CODE_KEY);
     this.refreshProductPackages();
   },
   mounted() {
-    this.$root.$on(CURRENCY_CHANGED_EVENT, (currencyCode) => {
-      this.currencyCode = currencyCode
+    this.$root.$on(CURRENCY_CHANGED_EVENT, (currencyCodeFromDropdown) => {
+      this.currencyCode = currencyCodeFromDropdown
       this.refreshProductPackages()
     });
+  },
+  beforeDestroy() {
+    this.$root.$off(CURRENCY_CHANGED_EVENT)
   }
 };
 </script>

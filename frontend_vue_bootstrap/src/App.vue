@@ -1,8 +1,6 @@
 <template>
   <div class="container">
-    <keep-alive>
       <TheHeader/>
-    </keep-alive>
     <router-view/>
   </div>
 </template>

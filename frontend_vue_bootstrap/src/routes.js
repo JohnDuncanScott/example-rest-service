@@ -8,6 +8,7 @@ export const PACKAGES_ROUTE = "Packages";
 export const EDIT_PACKAGE_ROUTE = "EditPackage";
 export const NEW_PACKAGE_ROUTE = "NewPackage";
 export const VIEW_PACKAGE_ROUTE = "ViewPackage";
+export const VIEW_BASKET_ROUTE = "ViewBasket";
 
 const router = new Router({
   mode: "history", // Use browser history
@@ -36,6 +37,11 @@ const router = new Router({
       path: "/packages/:id",
       name: VIEW_PACKAGE_ROUTE,
       component: () => import("./components/ProductPackageView")
+    },
+    {
+      path: "/basket",
+      name: VIEW_BASKET_ROUTE,
+      component: () => import("./components/BasketView")
     }
   ]
 });
