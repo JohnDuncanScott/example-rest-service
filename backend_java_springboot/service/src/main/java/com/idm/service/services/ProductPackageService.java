@@ -141,13 +141,16 @@ public class ProductPackageService {
     // TODO: Pricing concerns and conversions should probably be in a separate class since you don't necessarily
     // need to do an exchange unless you're displaying to the customer
     private ProductPackageInstant toProductPackageInstant(ProductPackage productPackage, Currency localCurrency) {
-        BigDecimal totalUsdPrice = productPackage.getProductIds().stream()
+        List<Product> products = productPackage.getProductIds().stream()
                 .map(productId -> productService.getById(productId))
+                .collect(Collectors.toList());
+        BigDecimal totalUsdPrice = products.stream()
                 .map(Product::getUsdPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return new ProductPackageInstant(
                 productPackage,
+                products,
                 totalUsdPrice,
                 localCurrency,
                 exchangeRateService.getExchangeRateForUsdTo(localCurrency),

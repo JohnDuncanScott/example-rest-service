@@ -1,15 +1,20 @@
 package com.idm.service.assemblers;
 
 import com.idm.service.controllers.ProductPackageController;
+import com.idm.service.models.data.Product;
 import com.idm.service.models.data.ProductPackage;
 import com.idm.service.models.data.ProductPackageInstant;
 import com.idm.service.models.resources.ProductPackageResource;
+import com.idm.service.models.resources.ProductResource;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 
 import javax.annotation.Nullable;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -44,7 +49,7 @@ public class ProductPackageResourceAssembler
                     originalProductPackageInstant.getProductPackage().getId(),
                     productPackageResource.getName(),
                     productPackageResource.getDescription(),
-                    originalProductPackageInstant.getProductPackage().getProductIds()
+                    productPackageResource.getProducts().stream().map(p -> p.getId()).collect(Collectors.toSet())
             );
         } else {
             return new ProductPackage(
@@ -71,11 +76,21 @@ public class ProductPackageResourceAssembler
     protected ProductPackageResource instantiateModel(ProductPackageInstant productPackageInstant) {
         ProductPackage productPackage = productPackageInstant.getProductPackage();
 
+        // TODO: Should have a separate assembler with their own self links probably?
+        List<ProductResource> productResources = productPackageInstant.getProducts().stream()
+                .map(p -> new ProductResource(
+                        p.getId(),
+                        p.getName(),
+                        productPackageInstant.getLocalCurrency(),
+                        productPackageInstant.getProductLocalPrice(p)))
+                .collect(Collectors.toList());
+
         return new ProductPackageResource(
                 productPackage.getId(),
                 productPackage.getName(),
                 productPackage.getDescription(),
                 productPackageInstant.getLocalCurrency(),
-                productPackageInstant.getTotalLocalPrice());
+                productPackageInstant.getTotalLocalPrice(),
+                productResources);
     }
 }

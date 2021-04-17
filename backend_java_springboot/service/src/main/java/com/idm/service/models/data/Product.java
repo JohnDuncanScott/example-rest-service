@@ -11,7 +11,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * Product is read-only for the purpose of this exercise.
  */
-// TODO: Should also probably have a ProductInstant version of this
 @Value
 public class Product {
     String id;
