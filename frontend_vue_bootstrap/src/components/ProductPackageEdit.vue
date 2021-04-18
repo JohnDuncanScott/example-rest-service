@@ -63,10 +63,16 @@ export default {
         e.preventDefault();
         this.errors = [];
 
-        if(!this.description) {
-            this.errors.push("Enter valid values");
-        } else if(this.description.length < 5) {
-            this.errors.push("Enter at least 5 characters in Description");
+        if (!this.name) {
+          this.errors.push("Name cannot be empty");
+        } else if (this.name.length < 5) {
+          this.errors.push("Name must be at least 5 characters");
+        }
+
+        if (!this.description) {
+          this.errors.push("Description cannot be empty");
+        } else if (this.description.length < 5) {
+          this.errors.push("Description must be at least 5 characters");
         }
 
         if(this.errors.length === 0) {
