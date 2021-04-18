@@ -4,7 +4,7 @@ import Router from "vue-router";
 Vue.use(Router);
 
 export const HOME_ROUTE = "Home";
-export const PACKAGES_ROUTE = "Packages";
+export const EDIT_PACKAGES_ROUTE = "EditPackages";
 export const EDIT_PACKAGE_ROUTE = "EditPackage";
 export const NEW_PACKAGE_ROUTE = "NewPackage";
 export const VIEW_PACKAGE_ROUTE = "ViewPackage";
@@ -20,7 +20,7 @@ const router = new Router({
     },
     {
       path: "/admin/packages",
-      name: PACKAGES_ROUTE,
+      name: EDIT_PACKAGES_ROUTE,
       component: () => import("./components/ProductPackagesEdit")
     },
     {

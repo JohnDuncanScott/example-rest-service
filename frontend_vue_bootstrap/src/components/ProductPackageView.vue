@@ -20,7 +20,7 @@ import UserPersonalisationService from '../service/UserPersonalisationService';
 import BasketService from '../service/BasketService';
 import CURRENCY_CODE_KEY from '../service/UserPersonalisationService';
 import getSymbolFromCurrency from 'currency-symbol-map'
-import { CURRENCY_CHANGED_EVENT } from '../events'
+import { ADD_TO_BASKET_EVENT, CURRENCY_CHANGED_EVENT } from '../events'
 export default {
   name: "ProductPackageView",
   data() {
@@ -55,8 +55,9 @@ export default {
           });
     },
     addToBasket() {
-      console.log(`Adding package to basket, id: ${this.productPackage.id}`)
-      BasketService.addProductPackage(this.productPackage)
+      console.log(`Adding package to basket, id: ${this.productPackage.id}`);
+      BasketService.addProductPackage(this.productPackage.id);
+      this.$root.$emit(ADD_TO_BASKET_EVENT);
     },
     getCurrencySymbol(currencyCode) {
       return getSymbolFromCurrency(currencyCode);

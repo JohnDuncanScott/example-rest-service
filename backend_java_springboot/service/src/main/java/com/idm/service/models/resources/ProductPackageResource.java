@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+// TODO: Should have a string representation of price show client can just display that without worrying about
+// currency formatting
 public class ProductPackageResource extends RepresentationModel<ProductPackageResource> {
     // A null id indicates an id needs to be generated
     private String id;

@@ -6,13 +6,11 @@
           Currency:
         </div>
         <div class="col-2">
-          <keep-alive>
-            <select class="form-select" aria-label="Currency selection" v-model="currencyCodeFromDropdown" @change="onCurrencyChange()">
-              <option value="USD">USD</option>
-              <option value="GBP">GBP</option>
-              <option value="EUR">EUR</option>
-            </select>
-          </keep-alive>
+          <select class="form-select" aria-label="Currency selection" v-model="currencyCodeFromDropdown" @change="onCurrencyChange()">
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+            <option value="EUR">EUR</option>
+          </select>
         </div>
         <div class="col-1">
           <button type="button" class="btn btn-primary" v-on:click="viewBasket()">
@@ -25,7 +23,8 @@
               viewBox="0 0 16 16">
                 <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
             </svg>
-            <div>{{this.currencySymbol}} 5,542</div>
+            <div>{{this.totalBasketValue.currencySymbol}}{{this.totalBasketValue.totalValueAsString}}</div>
+            <div v-if="this.totalBasketValue.isDiscounted"><strike>{{this.totalBasketValue.currencySymbol}}{{this.totalBasketValue.undiscountedValueAsString}}</strike></div>
           </button>
         </div>
       </div>
@@ -35,14 +34,16 @@
 <script>
 import { VIEW_BASKET_ROUTE } from '../routes';
 import getSymbolFromCurrency from 'currency-symbol-map';
-import { CURRENCY_CHANGED_EVENT } from '../events';
+import { ADD_TO_BASKET_EVENT, REMOVE_FROM_BASKET_EVENT, CURRENCY_CHANGED_EVENT } from '../events';
 import UserPersonalisationService from '../service/UserPersonalisationService';
 import CURRENCY_CODE_KEY from '../service/UserPersonalisationService';
+import BasketService from '../service/BasketService';
 export default {
   name: "TheHeader",
   data() {
     return {
-      currencyCodeFromDropdown: ""
+      currencyCodeFromDropdown: "",
+      totalBasketValue: {}
     };
   },
   computed: {
@@ -52,14 +53,28 @@ export default {
   },
   methods: {
     onCurrencyChange() {
-      console.log(`Currency changed: ${this.currencyCodeFromDropdown}`)
-      console.log(CURRENCY_CHANGED_EVENT)
+      console.log(`Currency changed: ${this.currencyCodeFromDropdown}`);
+      console.log(CURRENCY_CHANGED_EVENT);
       UserPersonalisationService.storeValue(CURRENCY_CODE_KEY, this.currencyCodeFromDropdown);
-      this.$root.$emit(CURRENCY_CHANGED_EVENT, this.currencyCodeFromDropdown)
+      this.refresh();
+      this.$root.$emit(CURRENCY_CHANGED_EVENT, this.currencyCodeFromDropdown);
     },
     viewBasket() {
-      this.$router.push({ name: VIEW_BASKET_ROUTE });
+      var currentRouteName = this.$route.name;
+
+      if (currentRouteName !== VIEW_BASKET_ROUTE) {
+        this.$router.push({ name: VIEW_BASKET_ROUTE });
+      }
     },
+    updateBasketTotal() {
+      BasketService.getTotalBasketValue()
+        .then(totalBasketValue => {
+          this.totalBasketValue = totalBasketValue;
+        })
+    },
+    refresh() {
+      this.updateBasketTotal();
+    }
   },
   created() {
       var currencyCode = UserPersonalisationService.getValue(CURRENCY_CODE_KEY);
@@ -71,6 +86,16 @@ export default {
       }
 
       this.currencyCodeFromDropdown = currencyCode;
+
+      this.refresh();
+  },
+  mounted() {
+    this.$root.$on(ADD_TO_BASKET_EVENT, this.refresh);
+    this.$root.$on(REMOVE_FROM_BASKET_EVENT, this.refresh);
+  },
+  beforeDestroy() {
+    this.$root.$off(ADD_TO_BASKET_EVENT);
+    this.$root.$off(REMOVE_FROM_BASKET_EVENT);
   }
 };
 </script>
