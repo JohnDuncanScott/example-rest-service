@@ -120,6 +120,7 @@ easy to start with.
   * `data` - Internal POJOs
   * `resources` - Client facing POJOs
 * `services` - Spring @Service classes, assemble backend data into internal POJOs
+* `adapters` - Clients for talking to dependencies
 ### API
 * `/packages`
   * GET - returns all packages
@@ -147,6 +148,8 @@ easy to start with.
 * TODO comments mention most limitations
 * There is no dynamic exchange rate data
 * There is no dynamic products data
+* There are no JavaDocs
+* Code coverage limits not defined
 
 ## Frontend
 * The styling is poor. Uses basic Bootstrap components. However, all functionality works and will test Backend.

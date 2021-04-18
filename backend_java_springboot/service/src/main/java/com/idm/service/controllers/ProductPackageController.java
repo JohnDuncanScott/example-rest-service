@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import javax.inject.Inject;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -30,7 +31,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping(value = "/packages", produces = { "application/hal+json" })
 public class ProductPackageController {
-    @Autowired
+    @Inject
     private ProductPackageService productPackageService;
 
     private ProductPackageResourceAssembler productPackageResourceAssembler = new ProductPackageResourceAssembler();
