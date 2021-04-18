@@ -1,22 +1,18 @@
 <template>
     <div class=container>
-        <table class="table">
-            <tbody>
-            <tr v-for="productPackageInBasket in productPackagesInBasket" v-bind:key="productPackageInBasket.productPackage.id">
-                <td>{{productPackageInBasket.productPackage.name}}</td>
-                <td>Individual price: {{getCurrencySymbol(productPackageInBasket.productPackage.localCurrency)}}{{productPackageInBasket.productPackage.totalLocalPrice}}</td>
-                <td>Quantity: {{productPackageInBasket.count}}</td>
-                <td><button class="btn btn-success" v-on:click="addToBasket(productPackageInBasket.productPackage.id)">+</button></td>
-                <td><button class="btn btn-danger" v-on:click="removeFromBasket(productPackageInBasket.productPackage.id)">-</button></td>
-            </tr>
-            <tr>
-                <td>
-                    <h5>Total: {{this.totalBasketValue.currencySymbol}}{{this.totalBasketValue.totalValueAsString}}</h5>
-                    <div v-if="this.totalBasketValue.isDiscounted"><strike>{{this.totalBasketValue.currencySymbol}}{{this.totalBasketValue.undiscountedValueAsString}}</strike> ({{this.totalBasketValue.discountedReason}})</div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="row my-2" v-for="productPackageInBasket in productPackagesInBasket" v-bind:key="productPackageInBasket.productPackage.id">
+            <div class="col-3 float-start">{{productPackageInBasket.productPackage.name}}</div>
+            <div class="col-3 float-start">Individual price: {{getCurrencySymbol(productPackageInBasket.productPackage.localCurrency)}}{{productPackageInBasket.productPackage.totalLocalPrice}}</div>
+            <div class="col-2 float-start">Quantity: {{productPackageInBasket.count}}</div>
+            <div class="col-1 float-start"><button class="btn btn-success" v-on:click="addToBasket(productPackageInBasket.productPackage.id)">+</button></div>
+            <div class="col-1 float-start"><button class="btn btn-danger" v-on:click="removeFromBasket(productPackageInBasket.productPackage.id)">-</button></div>
+        </div>
+        <div class="row">
+            <div>
+                <h5>Total: {{this.totalBasketValue.currencySymbol}}{{this.totalBasketValue.totalValueAsString}}</h5>
+                <div v-if="this.totalBasketValue.isDiscounted"><strike>{{this.totalBasketValue.currencySymbol}}{{this.totalBasketValue.undiscountedValueAsString}}</strike> ({{this.totalBasketValue.discountedReason}})</div>
+            </div>
+        </div>
     </div>
 </template>
 

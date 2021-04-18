@@ -3,6 +3,9 @@
       <div class="row">
         <div class="col">Welcome to the shop!</div>
         <div class="col-1">
+          <button type="button" class="btn btn-danger" v-on:click="viewAdmin()">Admin</button>
+        </div>
+        <div class="col-1">
           Currency:
         </div>
         <div class="col-2">
@@ -32,7 +35,7 @@
 </template>
 
 <script>
-import { VIEW_BASKET_ROUTE } from '../routes';
+import { EDIT_PACKAGES_ROUTE, VIEW_BASKET_ROUTE } from '../routes';
 import getSymbolFromCurrency from 'currency-symbol-map';
 import { ADD_TO_BASKET_EVENT, REMOVE_FROM_BASKET_EVENT, CURRENCY_CHANGED_EVENT } from '../events';
 import UserPersonalisationService from '../service/UserPersonalisationService';
@@ -58,6 +61,13 @@ export default {
       UserPersonalisationService.storeValue(CURRENCY_CODE_KEY, this.currencyCodeFromDropdown);
       this.refresh();
       this.$root.$emit(CURRENCY_CHANGED_EVENT, this.currencyCodeFromDropdown);
+    },
+    viewAdmin() {
+      var currentRouteName = this.$route.name;
+
+      if (currentRouteName !== EDIT_PACKAGES_ROUTE) {
+        this.$router.push({ name: EDIT_PACKAGES_ROUTE });
+      }
     },
     viewBasket() {
       var currentRouteName = this.$route.name;

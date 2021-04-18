@@ -1,29 +1,21 @@
 <template>
   <div class="container">
-    <div class="input-group mb-3">
+    <div class="col-4 my-1">
       <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-search" v-model="search">
     </div>
-    <div class="container">
-      <table class="table">
-        <tbody>
-          <tr>
-            <td>
-              <select class="form-select" aria-label="Filter selection" v-model="filterSelection">
-                <option v-bind:value="{ key: 'name', isAsc: true }">Sort by: Name (A-Z)</option>
-                <option v-bind:value="{ key: 'name', isAsc: false }">Sort by: Name (Z-A)</option>
-                <option v-bind:value="{ key: 'totalLocalPrice', isAsc: true }">Sort by: Price (Lowest to Highest)</option>
-                <option v-bind:value="{ key: 'totalLocalPrice', isAsc: false }">Sort by: Price (Highest to Lowest)</option>
-              </select>
-            </td>
-          </tr>
-          <tr v-for="productPackage in filteredProductPackages" v-bind:key="productPackage.id">
-            <td>{{productPackage.name}}</td>
-            <td>{{getCurrencySymbol(productPackage.localCurrency)}}{{productPackage.totalLocalPrice}}</td>
-            <td><button class="btn btn-info" v-on:click="viewProductPackage(productPackage.id)">Details</button></td>
-            <td><button class="btn btn-success" v-on:click="addToBasket(productPackage.id)">Add to cart</button></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-4 mt-1 mb-4">
+      <select class="form-select" aria-label="Filter selection" v-model="filterSelection">
+        <option v-bind:value="{ key: 'name', isAsc: true }">Sort by: Name (A-Z)</option>
+        <option v-bind:value="{ key: 'name', isAsc: false }">Sort by: Name (Z-A)</option>
+        <option v-bind:value="{ key: 'totalLocalPrice', isAsc: true }">Sort by: Price (Lowest to Highest)</option>
+        <option v-bind:value="{ key: 'totalLocalPrice', isAsc: false }">Sort by: Price (Highest to Lowest)</option>
+      </select>
+    </div>
+    <div class="row my-2" v-for="productPackage in filteredProductPackages" v-bind:key="productPackage.id">
+      <div class="col-3 float-start">{{productPackage.name}}</div>
+      <div class="col-1 float-start">{{getCurrencySymbol(productPackage.localCurrency)}}{{productPackage.totalLocalPrice}}</div>
+      <div class="col-1 float-start"><button class="btn btn-info" v-on:click="viewProductPackage(productPackage.id)">Details</button></div>
+      <div class="col-2 float-start"><button class="btn btn-success" v-on:click="addToBasket(productPackage.id)">Add to cart</button></div>
     </div>
   </div>
 </template>

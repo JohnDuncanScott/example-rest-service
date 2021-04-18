@@ -2,15 +2,15 @@
   <div class="container">
     <h6>Name</h6>
     <div>{{this.productPackage.name}}</div>
-    <h6>Description</h6>
+    <h6 class="mt-3">Description</h6>
     <div>{{this.productPackage.description}}</div>
-    <h6>Contents</h6>
+    <h6 class="mt-3">Contents</h6>
     <div v-for="product in productPackage.products" v-bind:key="product.id">
       <div>{{product.name}}</div>
     </div>
-    <h6>Package Price</h6>
+    <h6 class="mt-3">Price</h6>
     <div>{{getCurrencySymbol(this.productPackage.localCurrency)}}{{this.productPackage.totalLocalPrice}}</div>
-    <button class="btn btn-success" v-on:click="addToBasket()">Add to cart</button>
+    <div class="mt-3"><button class="btn btn-success" v-on:click="addToBasket()">Add to cart</button></div>
   </div>
 </template>
 
