@@ -15,7 +15,7 @@
     </modules>
 
     <properties>
-        <build.target.directory>D:/ProgrammingBinaries/InterviewPractice/target</build.target.directory>
+        <build.target.directory>D:/ProgrammingBinaries/ExampleRestService/target</build.target.directory>
         <junit.jupiter.version>5.5.0-M1</junit.jupiter.version>
         <google.inject.version>4.2.2</google.inject.version>
     </properties>

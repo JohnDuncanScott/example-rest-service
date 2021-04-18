@@ -95,15 +95,156 @@ easy to start with.
   * [Remember to unregister event listeners](https://www.fatalerrors.org/a/remember-to-remove-the-event-listener-bound-with-on-in-vue.html)
 
 # Instructions
-* Requirements
-  * Install [Java Development Kit 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) for your platform
-  * Install [nodejs](https://nodejs.org/en/) for your platform
+## Requirements
+* Install [Java Development Kit 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) for your platform
+* Install [nodejs](https://nodejs.org/en/) for your platform
   
-* Frontend
-  * cd frontend_vue_bootstrap
-  * npm install
-  * npm run serve
+## Backend
+* Open folder in IntelliJ and let it import the Maven project
+* Edit parent pom.xml and change **build.target.directory** to a build directory of your choosing
+* Compile the **service** module
+* Run the project
+* Open `http://localhost:8080/packages` in any browser to see a list of packages available
 
-* Web page
-  * Go to http://localhost:8081/ for customer facing end
-  * Go to http://localhost:8081/admin/packages for admin side
+## Frontend
+* cd frontend_vue_bootstrap
+* npm install
+* npm run serve
+* Open `http://localhost:8081/` to see the Home page (you won't see anything unless the backend is up and running)
+
+# Architecture
+## Backend
+* `assemblers` - Build models that are surfaced to client via REST responses
+* `controllers` - Standard Spring controllers, one for each API
+* `models`
+  * `data` - Internal POJOs
+  * `resources` - Client facing POJOs
+* `services` - Spring @Service classes, assemble backend data into internal POJOs
+### API
+* `/packages`
+  * GET - returns all packages
+  * GET `/{id}` - returns single package
+  * GET `/{id}/products` - returns products for a package
+  * GET `/{packageId}/products/{productId}` - returns product in a package
+  * DELETE `/{id}` - deletes a package
+  * PUT `/{id}` - updates a package. Name and Description are updateable, other changes are currently ignored
+  * POST - creates a new package with 0 products. Id will be generated automatically
+* `/products`
+  * GET - returns all products
+  * GET `/{id}` - returns single product
+
+## Frontend
+* `components` - Vue components, 1 for each view. Header is global. ...View components are customer facing. ...Edit components are internal Admin views
+* `service`
+  * `BasketService` - Mock service for storing basket contents
+  * `ProductPackageService` - Working service that calls Backend
+  * `UserPersonalisationService` - Mock service for storing currency selection
+* `events.js` - Constants for events used
+* `routes.js` - Navigation setup
+
+# Known issues
+## Backend
+* TODO comments mention most limitations
+* There is no dynamic exchange rate data
+* There is no dynamic products data
+
+## Frontend
+* The styling is poor. Uses basic Bootstrap components. However, all functionality works and will test Backend.
+* Code duplication in certain areas, needs some refactoring to create smaller components rather than just focusing on each View individually
+* Cannot add products to a package in Admin mode
+* No security around Admin mode
+* Does not have full accessibility (i.e. aria tags for everything)
+* Does not have localisation (e.g. currency delimiter does not change to match currency)
+* Discounting and Basket storing are done on the client side as a shortcut. Client should be doing as little logic as possible
+* Should be more proper JavaScript classes for some of the modelling
+* Revisiting Home by changing the URL in the browser will result in loss of cart information. Pressing Back works fine. You can use this bug to reset your cart to start a different test case
+* No automated tests. Needs things like Selenium tests to make sure things are displayed correctly
+
+# Manual test cases
+## Home
+* Search
+  * Check packages change
+  * Check case insensitive
+  * Deleting search will undo filter
+* Sorting
+  * Check all sort options work
+* Details
+  * Check package info is accessible via button (and is correct for that package)
+* Basket
+  * Check package can be added to cart via button
+  * Check basket value updates when package is added
+## Package details (reachable via Details button on Home)
+* Info
+  * Check Name, Description, Contents and Price are correct
+* Basket
+  * Check package can be added to cart via button
+  * Check basket value updates when package is added
+## Basket (reachable via Basket button on Header)
+* Info
+  * Check cart shows items added from other screens
+  * Check cart shows Name, Individual price and Quantity of package
+  * Check message is shown if no items are present in cart
+  * Check Total displays correct value
+* Navigation
+  * Check pressing Basket button does not cause a log error (can't navigate to same page)
+* Events
+  * Pressing the plus button increases the Quantity by 1 and updates the Basket and Total
+  * Pressing the minus button decreases the Quantity by 1 and updates the Basket and Total
+  * Discounting:
+    * Reducing package bought to a single package stops discounting being shown in Total and Basket
+    * Increasing package bought above a single package causes discounting to be shown in Total and Basket
+    * Check Total shows discounted and original value
+    * Check Total shows reason for discount
+## Header
+* Contents
+  * Check has title, Admin button, Currency selection, Basket button
+* Navigation
+  * Check Admin button takes you to Admin page
+  * Check Basket button takes you to Basket page
+* Events
+  * Check adding more than 1 package triggers Basket button to show discount (discounted value and original value) from:
+    * Home view
+    * Package details view
+  * Check Currency selection triggers price and symbol changes in:
+    * Home view
+    * Package details view
+    * Basket view
+* State
+  * Check navigating forwards and backwards between Home view, Package details view and Basket view remembers Currency selection
+## Admin (reachable via Admin button in Header)
+* Info
+  * Check Id, Name, Description, Update button and Delete button shown
+* Navigation
+  * Check Update button takes you to Package edit view
+  * Check Add button takes you to New package view
+* State
+  * Check delete deletes the package
+  * Check all packages can be deleted
+  * (will need to restart Backend to recover from this test if you want the old packages)
+## Add package view (reachable via Add button on Admin page)
+* Info
+  * Check Name and Description can be seen (nothing else)
+  * Check Name and Description are editable
+  * Check Name and Description are initially blank
+* Validation
+  * Check Name cannot be blank
+  * Check Name must be more than 5 characters
+  * Check Description cannot be blank
+  * Check Description must be more than 5 characters
+* Storage
+  * Check Save button saves package to Backend AND navigates you back to Admin page
+  * Check package is saved with correct information
+## Update package view (reachable via Update button on Admin page)
+* Info
+  * Check Id, Name, Description and Products are viewable
+  * Check only Name and Description are editable
+* Validation
+  * Check Name cannot be blank
+  * Check Name must be more than 5 characters
+  * Check Description cannot be blank
+  * Check Description must be more than 5 characters
+* Storage
+  * Check Save button saves package to Backend AND navigates you back to Admin page
+  * Check package is saved with correct information
+## Exploratory testing
+* Open Developer tools and navigate around website, keeping an eye out of interesting logs and errors

@@ -17,13 +17,17 @@
         <label><h6>Description</h6></label>
         <input type="text" class="form-control" v-model="description">
       </fieldset>
+      <fieldset class="form-group my-3">
+        <label v-if="id"><h6>Products</h6></label>
+        <textarea v-if="id" type="text" class="form-control" v-model="productsAsString" disabled></textarea>
+      </fieldset>
       <button class="btn btn-success" type="submit">Save</button>
     </form>
   </div>
 </template>
 
 <script>
-import { PACKAGES_ROUTE } from '../routes';
+import { EDIT_PACKAGES_ROUTE } from '../routes';
 import ProductPackageService from '../service/ProductPackageService';
 
 export default {
@@ -32,6 +36,8 @@ export default {
     return {
       name: "",
       description: "",
+      products: [],
+      productsAsString: "",
       errors: []
     };
   },
@@ -55,6 +61,8 @@ export default {
           .then(res => {
             this.name = res.data.name;
             this.description = res.data.description;
+            this.products = res.data.products;
+            this.productsAsString = JSON.stringify(this.products);
           });
     },
     validateAndSubmit(e) {
@@ -81,7 +89,7 @@ export default {
                     description: this.description
                   })
                   .then(() => {
-                      this.$router.push({ name: PACKAGES_ROUTE });
+                      this.$router.push({ name: EDIT_PACKAGES_ROUTE });
                   });
             } else {
                 ProductPackageService.updateProductPackage(
@@ -89,10 +97,11 @@ export default {
                   {
                     id: this.id,
                     name: this.name,
-                    description: this.description
+                    description: this.description,
+                    products: this.products
                   })
                   .then(() => {
-                      this.$router.push({ name: PACKAGES_ROUTE });
+                      this.$router.push({ name: EDIT_PACKAGES_ROUTE });
                   });
             }
         }
