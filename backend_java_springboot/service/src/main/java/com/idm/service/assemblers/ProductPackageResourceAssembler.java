@@ -1,7 +1,6 @@
 package com.idm.service.assemblers;
 
 import com.idm.service.controllers.ProductPackageController;
-import com.idm.service.models.data.Product;
 import com.idm.service.models.data.ProductPackage;
 import com.idm.service.models.data.ProductPackageInstant;
 import com.idm.service.models.resources.ProductPackageResource;
@@ -15,7 +14,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nullable;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

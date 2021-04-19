@@ -150,9 +150,9 @@ easy to start with.
 ## Backend
 * TODO comments mention most limitations
 * There is no dynamic exchange rate data
-* There is no dynamic products data
 * There are no JavaDocs
-* Code coverage limits not defined
+* Code coverage limits not defined but unit test coverage is reasonably high
+* Thread safety has not been tested
 
 ## Frontend
 * The styling is poor. Uses basic Bootstrap components. However, all functionality works and will test Backend.
