@@ -56,16 +56,21 @@ public class ProductPackageClientAdapterImpl implements ProductPackageClientAdap
     @Override
     public ProductPackage save(@NonNull ProductPackage productPackage) {
         if (productPackage.getId() == null) {
-            // TODO: Not thread safe
-            productPackage.setId(Integer.toString(++idCounter));
-            productPackagesMap.put(productPackage.getId(), productPackage);
-            log.info("Added new product package: {}", productPackage);
+            // TODO: Replacing with proper safe id generation
+            ProductPackage newProductPackage = new ProductPackage(
+                    Integer.toString(++idCounter),
+                    productPackage.getName(),
+                    productPackage.getDescription(),
+                    productPackage.getProductIds()
+            );
+            productPackagesMap.put(newProductPackage.getId(), newProductPackage);
+            log.info("Added new product package: {}", newProductPackage);
+            return newProductPackage;
         } else {
             deleteById(productPackage.getId());
             productPackagesMap.put(productPackage.getId(), productPackage);
             log.info("Updated product package: {}", productPackage);
+            return productPackage;
         }
-
-        return productPackage;
     }
 }

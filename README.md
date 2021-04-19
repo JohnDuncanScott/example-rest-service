@@ -250,4 +250,4 @@ easy to start with.
   * Check Save button saves package to Backend AND navigates you back to Admin page
   * Check package is saved with correct information
 ## Exploratory testing
-* Open Developer tools and navigate around website, keeping an eye out of interesting logs and errors
+* Open Developer tools and navigate around website, keeping an eye out for interesting logs and errors
