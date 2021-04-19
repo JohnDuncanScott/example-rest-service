@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.Currency;
 import java.util.List;
 
+// TODO: Add full unit tests
 @Value
 public class ProductPackageInstant {
     ProductPackage productPackage;

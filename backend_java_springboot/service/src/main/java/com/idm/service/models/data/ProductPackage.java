@@ -12,6 +12,7 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkArgument;
 
 // TODO: For simplicity, a package can only contain a unique set of products
+// TODO: Add full unit tests
 @Value
 public class ProductPackage {
     // TODO: A null id indicates an id needs to be generated, having something mutable on an immutable object

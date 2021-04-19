@@ -1,5 +1,6 @@
 package com.idm.service.models.data;
 
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * Product is read-only for the purpose of this exercise.
  */
+// TODO: Add full unit tests
 @Value
 public class Product {
     String id;

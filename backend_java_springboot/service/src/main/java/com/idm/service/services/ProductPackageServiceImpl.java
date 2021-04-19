@@ -105,9 +105,9 @@ public class ProductPackageServiceImpl implements ProductPackageService {
     public ProductPackageInstant save(
             @NonNull ProductPackage productPackage,
             @NonNull Currency currency) {
-        productPackageClientAdapter.save(productPackage);
+        ProductPackage newProductPackage = productPackageClientAdapter.save(productPackage);
 
-        return toProductPackageInstant(productPackage, currency);
+        return toProductPackageInstant(newProductPackage, currency);
     }
 
     // TODO: Pricing concerns and conversions should probably be in a separate class since you don't necessarily

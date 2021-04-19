@@ -8,8 +8,11 @@ import com.idm.service.models.resources.ProductPackageResource;
 import com.idm.service.models.resources.ProductResource;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nullable;
 
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+// TODO: Add full unit tests
 @Slf4j
 public class ProductPackageResourceAssembler
         extends RepresentationModelAssemblerSupport<ProductPackageInstant, ProductPackageResource> {
@@ -63,6 +67,14 @@ public class ProductPackageResourceAssembler
     public ProductPackageResource toModel(@NonNull ProductPackageInstant productPackageInstant) {
         ProductPackageResource resource = this.createModelWithId(
                 productPackageInstant.getProductPackage().getId(), productPackageInstant);
+        // HACK: Adjust self link for currency (must be a better way of doing this but documentation isn't clear)
+        Link selfLink = resource.getLink(IanaLinkRelations.SELF).get();
+        UriComponents uc = UriComponentsBuilder.fromUri(selfLink.toUri())
+                .queryParam("cs", productPackageInstant.getLocalCurrency().getCurrencyCode())
+                .build();
+        selfLink = Link.of(uc.toUriString(), IanaLinkRelations.SELF);
+        resource.removeLinks().add(selfLink);
+
         Link productsLink = linkTo(methodOn(ProductPackageController.class)
                 .getProductsForPackage(
                         productPackageInstant.getProductPackage().getId(),

@@ -7,7 +7,6 @@ import com.idm.service.models.data.ProductPackageInstant;
 import com.idm.service.models.resources.ProductPackageResource;
 import com.idm.service.services.ProductPackageService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -127,8 +126,7 @@ public class ProductPackageController {
         Currency currency = toCurrency(cs);
         ProductPackage productPackage = productPackageResourceAssembler.fromModel(
                 productPackageResource,
-                productPackageService.getById(id, currency)
-        );
+                productPackageService.getById(id, currency));
         ProductPackageInstant updatedProductPackageInstant = productPackageService.save(productPackage, currency);
         ProductPackageResource updatedProductPackageResource = productPackageResourceAssembler
                 .toModel(updatedProductPackageInstant);

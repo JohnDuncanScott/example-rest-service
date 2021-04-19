@@ -88,6 +88,9 @@ easy to start with.
     * [Comparison of REST and HATEOS](https://www.codingame.com/playgrounds/6723/applying-hateoas-to-a-rest-api-with-spring-boot)
     * [What is "_embedded" in the request for collections?](https://stackoverflow.com/questions/27405637/meaning-and-usage-of-embedded-in-hateoas/27424771)
     * [Why isn't .toCollectionModel working?](https://stackoverflow.com/questions/60635680/understanding-spring-hateoas-error-embedded-wrapper-returned-null-for-both-the)
+  * Testing
+    * [Getting started with Spring controller testing](https://spring.io/guides/gs/testing-web/)
+    * [JSON - Deserialising arrays](https://www.baeldung.com/jackson-collection-array)
 * Vue
   * [Style guide](https://vuejs.org/v2/style-guide/)
   * [Cross component communication](https://medium.com/js-dojo/component-communication-in-vue-js-ca8b591d7efa)
@@ -158,6 +161,7 @@ easy to start with.
 * No security around Admin mode
 * Does not have full accessibility (i.e. aria tags for everything)
 * Does not have localisation (e.g. currency delimiter does not change to match currency)
+* Cross browser compatibility unknown
 * Discounting and Basket storing are done on the client side as a shortcut. Client should be doing as little logic as possible
 * Should be more proper JavaScript classes for some of the modelling
 * Revisiting Home by changing the URL in the browser will result in loss of cart information. Pressing Back works fine. You can use this bug to reset your cart to start a different test case
