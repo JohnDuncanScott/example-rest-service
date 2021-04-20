@@ -7,7 +7,6 @@ body {
     background:grey;
     color: white;
     width: 45px;
-    min-width: none;
 }
 
 .btn-home:hover {
@@ -44,10 +43,6 @@ body {
     background: yellow;
 }
 
-.btn-admin {
-    background: orangered;
-}
-
 .btn-basket {
     background: gold;
     width: 100%;
@@ -57,12 +52,38 @@ body {
     background: yellow;
 }
 
+.div-basket-item {
+    background: rgba(113, 114, 113, 0.2);
+    border-radius: 4px;
+}
+
 .div-section {
     background: rgba(113, 114, 113, 0.5);
     border-radius: 4px;
 }
 
-.div-basket-item {
-    background: rgba(113, 114, 113, 0.2);
-    border-radius: 4px;
+/* Admin section */
+
+.btn-admin-warning {
+    background: crimson;
+}
+
+.btn-admin-warning:hover {
+    background: red;
+}
+
+.btn-admin-modify {
+    background: aquamarine;
+}
+
+.btn-admin-modify:hover {
+    background: cyan;
+}
+
+.btn-admin-create {
+    background: rgb(98, 231, 65);
+}
+
+.btn-admin-create:hover {
+    background: greenyellow;
 }

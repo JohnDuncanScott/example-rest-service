@@ -155,10 +155,11 @@ easy to start with.
 * Thread safety has not been tested
 
 ## Frontend
-* The styling works for desktop for customer facing pages. The admin pages are not well styled.
+* The styling works for desktop for customer facing pages. However, they do not look nice when resizing, although the page is functional. The admin pages are not well styled.
 * Code duplication in certain areas, needs some refactoring to create smaller components rather than just focusing on each View individually
 * Cannot add products to a package in Admin mode
 * No security around Admin mode
+* No double-check when deleting packages
 * Does not have full accessibility (i.e. aria tags for everything)
 * Does not have localisation (e.g. currency delimiter does not change to match currency)
 * Cross browser compatibility unknown

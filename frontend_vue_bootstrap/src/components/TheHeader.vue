@@ -16,7 +16,7 @@
           </button>
         </div>
         <div class="col-1 float-start">
-          <button type="button" class="btn btn-admin" v-on:click="viewAdmin()">
+          <button type="button" class="btn btn-admin-warning" v-on:click="viewAdmin()">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="19"
