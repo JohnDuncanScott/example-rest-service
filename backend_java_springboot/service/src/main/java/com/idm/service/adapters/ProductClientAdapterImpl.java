@@ -10,10 +10,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -28,6 +28,9 @@ public class ProductClientAdapterImpl implements ProductClientAdapter {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     // TODO: Move cache to parent service. Should be more like exchange rate one
     private final Map<String, Product> productCache = new HashMap<>();
+
+    @Inject
+    private CloseableHttpClient httpClient;
 
     @Override
     public List<Product> getAllProducts() {
@@ -48,14 +51,13 @@ public class ProductClientAdapterImpl implements ProductClientAdapter {
             return;
         }
 
-        CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("https://product-service.herokuapp.com/api/v1/products");
         // TODO: Move credentials to secure store
         String base64EncodedCredentials = "Basic " + Base64.getEncoder().encodeToString(("user:pass").getBytes());
         httpGet.setHeader("Authorization", base64EncodedCredentials);
         httpGet.setHeader("Content-Type", "application/json");
 
-        try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             log.info("Products service response status: {}", response.getStatusLine());
 
             if (response.getStatusLine().getStatusCode() == 200) {

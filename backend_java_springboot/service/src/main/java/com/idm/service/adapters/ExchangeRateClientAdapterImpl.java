@@ -3,15 +3,14 @@ package com.idm.service.adapters;
 import com.jayway.jsonpath.JsonPath;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -25,10 +24,12 @@ import java.util.Currency;
 public class ExchangeRateClientAdapterImpl implements ExchangeRateClientAdapter {
     private static final MathContext MATH_CONTEXT = new MathContext(6, RoundingMode.HALF_EVEN);
 
+    @Inject
+    private CloseableHttpClient httpClient;
+
     @Override
     public BigDecimal getExchangeRate(@NonNull Currency baseCurrency, @NonNull Currency targetCurrency)
             throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
         // TODO: Find a better API, this one does not support specifying a base currency
         // TODO: Move credentials to secure store
         String url =
@@ -36,7 +37,7 @@ public class ExchangeRateClientAdapterImpl implements ExchangeRateClientAdapter 
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-Type", "application/json");
 
-        try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             log.info("Exchange rate service response status: {}", response.getStatusLine());
 
             if (response.getStatusLine().getStatusCode() == 200) {
