@@ -1,0 +1,68 @@
+body {
+    background:black;
+    color: white;
+}
+
+.btn-home {
+    background:grey;
+    color: white;
+    width: 45px;
+    min-width: none;
+}
+
+.btn-home:hover {
+    background: darkgray;
+    color: white;
+}
+
+.btn-shop-item {
+    background:grey;
+    color: white;
+    width: 100%;
+    transition: transform 0.1s ease;
+}
+
+.btn-shop-item:hover {
+    background: darkgray;
+    color: white;
+    transform: scale(1.03);
+}
+
+.btn-add-to-cart {
+    background: gold;
+}
+
+.btn-add-to-cart:hover {
+    background: yellow;
+}
+
+.btn-remove-from-cart {
+    background: lemonchiffon;
+}
+
+.btn-remove-from-cart:hover {
+    background: yellow;
+}
+
+.btn-admin {
+    background: orangered;
+}
+
+.btn-basket {
+    background: gold;
+    width: 100%;
+}
+
+.btn-basket:hover {
+    background: yellow;
+}
+
+.div-section {
+    background: rgba(113, 114, 113, 0.5);
+    border-radius: 4px;
+}
+
+.div-basket-item {
+    background: rgba(113, 114, 113, 0.2);
+    border-radius: 4px;
+}

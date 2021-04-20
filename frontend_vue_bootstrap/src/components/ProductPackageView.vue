@@ -1,16 +1,17 @@
 <template>
   <div class="container">
-    <h6>Name</h6>
+    <div class="div-section col-2 p-1 ps-2 mb-1">Name</div>
     <div>{{this.productPackage.name}}</div>
-    <h6 class="mt-3">Description</h6>
+    <div class="div-section col-2 mt-4 mb-1 p-1 ps-2">Description</div>
     <div>{{this.productPackage.description}}</div>
-    <h6 class="mt-3">Contents</h6>
+    <div class="div-section col-2 mt-4 p-1 ps-2 mb-1">Contents</div>
     <div v-for="product in productPackage.products" v-bind:key="product.id">
-      <div>{{product.name}}</div>
+      <!-- HACK: Can't have multiple products currently, so just hardcode -->
+      <div>{{product.name}} x 1</div>
     </div>
-    <h6 class="mt-3">Price</h6>
+    <div class="div-section col-2 mt-4 p-1 ps-2 mb-1">Price</div>
     <div>{{getCurrencySymbol(this.productPackage.localCurrency)}}{{this.productPackage.totalLocalPrice}}</div>
-    <div class="mt-3"><button class="btn btn-success" v-on:click="addToBasket()">Add to cart</button></div>
+    <div class="mt-4"><button class="btn btn-add-to-cart" v-on:click="addToBasket()">Add to cart</button></div>
   </div>
 </template>
 

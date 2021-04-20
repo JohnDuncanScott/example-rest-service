@@ -1,13 +1,35 @@
 <template>
     <div class="container">
-      <div class="row">
-        <div class="col">Welcome to the shop!</div>
-        <div class="col-1 float-end">
-          <button type="button" class="btn btn-danger" v-on:click="viewAdmin()">Admin</button>
+      <div class="row mb-4 mt-4">
+        <div class="col-1 float-end pe-5">
+          <button type="button" class="btn btn-home" v-on:click="viewHome()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="19"
+              height="19"
+              fill="currentColor"
+              class="bi bi-house-fill"
+              viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+              <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+            </svg>
+          </button>
         </div>
-        <div class="col-1 float-end">
-          Currency:
+        <div class="col-1 float-start">
+          <button type="button" class="btn btn-admin" v-on:click="viewAdmin()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="19"
+              height="19"
+              fill="currentColor"
+              class="bi bi-gear"
+              viewBox="0 0 16 16">
+              <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+              <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+            </svg>
+          </button>
         </div>
+        <div class="col text-center h2">Saruman's Store</div>
         <div class="col-2 float-end">
           <select class="form-select" aria-label="Currency selection" v-model="currencyCodeFromDropdown" @change="onCurrencyChange()">
             <option value="USD">USD</option>
@@ -16,11 +38,11 @@
           </select>
         </div>
         <div class="col-3 float-end">
-          <button type="button" class="btn btn-primary float-end" v-on:click="viewBasket()">
+          <button type="button" class="btn btn-basket float-end" v-on:click="viewBasket()">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="18"
+              height="18"
               fill="currentColor"
               class="bi bi-cart float-start mx-2"
               viewBox="0 0 16 16">
@@ -35,7 +57,7 @@
 </template>
 
 <script>
-import { EDIT_PACKAGES_ROUTE, VIEW_BASKET_ROUTE } from '../routes';
+import { EDIT_PACKAGES_ROUTE, HOME_ROUTE, VIEW_BASKET_ROUTE } from '../routes';
 import getSymbolFromCurrency from 'currency-symbol-map';
 import { ADD_TO_BASKET_EVENT, REMOVE_FROM_BASKET_EVENT, CURRENCY_CHANGED_EVENT } from '../events';
 import UserPersonalisationService from '../service/UserPersonalisationService';
@@ -74,6 +96,13 @@ export default {
 
       if (currentRouteName !== VIEW_BASKET_ROUTE) {
         this.$router.push({ name: VIEW_BASKET_ROUTE });
+      }
+    },
+    viewHome() {
+      var currentRouteName = this.$route.name;
+
+      if (currentRouteName !== HOME_ROUTE) {
+        this.$router.push({ name: HOME_ROUTE });
       }
     },
     updateBasketTotal() {

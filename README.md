@@ -149,13 +149,13 @@ easy to start with.
 # Known issues
 ## Backend
 * TODO comments mention most limitations
-* There is no dynamic exchange rate data
+* When the server is run for the first time, it takes a few seconds to get the Product information. The frontend will look blank for a few seconds and then react
 * There are no JavaDocs
 * Code coverage limits not defined but unit test coverage is reasonably high
 * Thread safety has not been tested
 
 ## Frontend
-* The styling is poor. Uses basic Bootstrap components. However, all functionality works and will test Backend.
+* The styling works for desktop for customer facing pages. The admin pages are not well styled.
 * Code duplication in certain areas, needs some refactoring to create smaller components rather than just focusing on each View individually
 * Cannot add products to a package in Admin mode
 * No security around Admin mode

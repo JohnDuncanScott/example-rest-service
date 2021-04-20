@@ -50,7 +50,8 @@ public class ExchangeRateClientAdapterImpl implements ExchangeRateClientAdapter 
 
                 return targetRate.divide(baseRate, MATH_CONTEXT);
             }
-        } catch (IOException ex) {
+        // TODO: Shouldn't catch root exception, but just making sure this dependency is fully isolated
+        } catch (Exception ex) {
             log.error("Failed while calling Products service", ex);
         }
 

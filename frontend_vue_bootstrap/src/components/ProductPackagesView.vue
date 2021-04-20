@@ -11,11 +11,15 @@
         <option v-bind:value="{ key: 'totalLocalPrice', isAsc: false }">Sort by: Price (Highest to Lowest)</option>
       </select>
     </div>
+    <div class="row my-2 ms-1" v-if="this.productPackages.length === 0">Loading...</div>
     <div class="row my-2" v-for="productPackage in filteredProductPackages" v-bind:key="productPackage.id">
-      <div class="col-3 float-start">{{productPackage.name}}</div>
-      <div class="col-1 float-start">{{getCurrencySymbol(productPackage.localCurrency)}}{{productPackage.totalLocalPrice}}</div>
-      <div class="col-1 float-start"><button class="btn btn-info" v-on:click="viewProductPackage(productPackage.id)">Details</button></div>
-      <div class="col-2 float-start"><button class="btn btn-success" v-on:click="addToBasket(productPackage.id)">Add to cart</button></div>
+      <div class="col-4 float-start">
+        <btn class="btn btn-shop-item" v-on:click="viewProductPackage(productPackage.id)">
+          <div class="float-start me-4">{{productPackage.name}}</div>
+          <div class="float-end">{{getCurrencySymbol(productPackage.localCurrency)}}{{productPackage.totalLocalPrice}}</div>
+        </btn>
+      </div>
+      <div class="col-2 float-start"><button class="btn btn-add-to-cart" v-on:click="addToBasket(productPackage.id)">Add to cart</button></div>
     </div>
   </div>
 </template>
