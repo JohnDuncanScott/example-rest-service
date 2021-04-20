@@ -103,17 +103,20 @@ easy to start with.
 * Install [nodejs](https://nodejs.org/en/) for your platform
   
 ## Backend
-* Open folder in IntelliJ and let it import the Maven project
+* Open folder **backend_java_springboot** in IntelliJ and let it import the Maven project
 * Edit parent pom.xml and change **build.target.directory** to a build directory of your choosing
 * Compile the **service** module
-* Run the project
+* Go to Run -> Edit Configurations -> Add **Application** and set the following:
+  * Main class: `com.idm.service.ServiceApplication`
+  * Use classpath of module: `service`
+* Run the configuration you just created
 * Open `http://localhost:8080/packages` in any browser to see a list of packages available
 
 ## Frontend
-* cd frontend_vue_bootstrap
-* npm install
-* npm run serve
-* Open `http://localhost:8081/` to see the Home page (you won't see anything unless the backend is up and running)
+* `cd frontend_vue_bootstrap`
+* Run `npm install`
+* Run `npm run serve`
+* Open `http://localhost:8081/` to see the Home page. You won't see any packages unless the backend is up and running
 
 # Architecture
 ## Backend
