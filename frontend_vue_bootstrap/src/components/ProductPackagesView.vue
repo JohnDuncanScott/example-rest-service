@@ -14,10 +14,10 @@
     <div class="row my-2 ms-1" v-if="this.productPackages.length === 0">Loading...</div>
     <div class="row my-2" v-for="productPackage in filteredProductPackages" v-bind:key="productPackage.id">
       <div class="col-4 float-start">
-        <btn class="btn btn-shop-item" v-on:click="viewProductPackage(productPackage.id)">
+        <div class="btn btn-shop-item" v-on:click="viewProductPackage(productPackage.id)">
           <div class="float-start me-4">{{productPackage.name}}</div>
           <div class="float-end">{{getCurrencySymbol(productPackage.localCurrency)}}{{productPackage.totalLocalPrice}}</div>
-        </btn>
+        </div>
       </div>
       <div class="col-2 float-start"><button class="btn btn-add-to-cart" v-on:click="addToBasket(productPackage.id)">Add to cart</button></div>
     </div>

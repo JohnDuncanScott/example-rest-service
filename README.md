@@ -167,6 +167,7 @@ easy to start with.
 * Should be more proper JavaScript classes for some of the modelling
 * Revisiting Home by changing the URL in the browser will result in loss of cart information. Pressing Back works fine. You can use this bug to reset your cart to start a different test case
 * No automated tests. Needs things like Selenium tests to make sure things are displayed correctly
+* Promises should have error logging
 
 # Manual test cases
 ## Home
@@ -227,6 +228,7 @@ easy to start with.
   * Check Add button takes you to New package view
 * State
   * Check delete deletes the package
+  * Check deleting a package that's in the cart removes it from the cart (sub-test 1: 1 item in cart, sub-test 2: > 1 item in cart)
   * Check all packages can be deleted
   * (will need to restart Backend to recover from this test if you want the old packages)
 ## Add package view (reachable via Add button on Admin page)
@@ -254,5 +256,6 @@ easy to start with.
 * Storage
   * Check Save button saves package to Backend AND navigates you back to Admin page
   * Check package is saved with correct information
+  * Check updating a package that's in the cart updates the cart item on navigation
 ## Exploratory testing
 * Open Developer tools and navigate around website, keeping an eye out for interesting logs and errors

@@ -25,6 +25,8 @@
 <script>
 import { NEW_PACKAGE_ROUTE, EDIT_PACKAGE_ROUTE } from '../routes';
 import ProductPackageService from '../service/ProductPackageService';
+import BasketService from '../service/BasketService';
+import { REMOVE_FROM_BASKET_EVENT } from '../events'
 export default {
   name: "ProductPackagesEdit",
   data() {
@@ -49,7 +51,11 @@ export default {
         .then(() => {
           this.message = `Deletion of product package ${id} was successful`;
           this.refreshProductPackages();
-        });
+        })
+        .then();
+
+      BasketService.deleteProductPackage(id);
+      this.$root.$emit(REMOVE_FROM_BASKET_EVENT);
     },
     updateProductPackage(id) {
       this.$router.push({ name: EDIT_PACKAGE_ROUTE, params: { id: id } });

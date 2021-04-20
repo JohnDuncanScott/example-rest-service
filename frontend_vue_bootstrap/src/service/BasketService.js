@@ -28,6 +28,7 @@ class BasketService {
         }
     }
 
+    // Decrements quantity by 1 or removes package completely if only 1 remaining
     removeProductPackage(id) {
         var productPackageMetadata = BasketService.productPackagesMetadata[id];
 
@@ -38,12 +39,24 @@ class BasketService {
                 console.log(`More than 1 in basket, decrementing count by 1, id: ${id}`);
                 BasketService.productPackagesMetadata[id].count = productPackageMetadata.count - 1;
             } else {
-                // Without this, the basket won't actually remove the final item. See:
-                // https://stackoverflow.com/questions/50782129/deleting-an-object-by-key-doesnt-update-the-vue-component
-                Vue.delete(BasketService.productPackagesMetadata, id);
+                this.deleteProductPackage(id);
             }
         } else {
             console.log(`Could not remove package from basket, couldn't find, id: ${id}`);
+        }
+    }
+
+    // Removes a package regardless of quantity remaining
+    deleteProductPackage(id) {
+        var productPackageMetadata = BasketService.productPackagesMetadata[id];
+
+        if (productPackageMetadata) {
+            console.log(`Deleting package from basket, id: ${id}`);
+            // Without this, the basket won't actually remove the final item. See:
+            // https://stackoverflow.com/questions/50782129/deleting-an-object-by-key-doesnt-update-the-vue-component
+            Vue.delete(BasketService.productPackagesMetadata, id);
+        } else {
+            console.log(`Could not delete package from basket, couldn't find, id: ${id}`);
         }
     }
 
