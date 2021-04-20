@@ -3,7 +3,7 @@
     <div class="h3 mb-4">Product Packages Admin</div>
     <div v-if="message" class="alert alert-success">{{this.message}}</div>
     <div class="row mb-1 ms-0">
-      <div class="col-1 float-start h6">Id</div>
+      <div class="col-1 float-start h6">ID</div>
       <div class="col-2 float-start h6">Name</div>
       <div class="col-4 float-start h6">Description</div>
     </div>
@@ -61,7 +61,7 @@ export default {
       this.$router.push({ name: EDIT_PACKAGE_ROUTE, params: { id: id } });
     },
     addProductPackage() {
-      this.$router.push({ name: NEW_PACKAGE_ROUTE });
+      this.$router.push({ name: NEW_PACKAGE_ROUTE, params: { id: "new" }  });
     }
   },
   created() {

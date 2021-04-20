@@ -6,7 +6,7 @@
         <div class="alert alert-warning" v-bind:key="index" v-for="(error, index) in errors">{{error}}</div>
       </div>
       <fieldset class="form-group my-3">
-        <label class="h6" v-if="id">Id</label>
+        <label class="h6" v-if="id">ID</label>
         <input v-if="id" type="text" class="form-control" v-model="id" disabled>
       </fieldset>
       <fieldset class="form-group my-3">
@@ -57,6 +57,10 @@ export default {
   },
   methods: {
     refreshProductPackage() {
+        if (!this.id) {
+          return;
+        }
+
         ProductPackageService.getProductPackage(this.id)
           .then(res => {
             this.name = res.data.name;

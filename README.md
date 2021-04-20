@@ -158,6 +158,7 @@ easy to start with.
 * The styling works for desktop for customer facing pages. However, they do not look nice when resizing, although the page is functional. The admin pages are not well styled.
 * Code duplication in certain areas, needs some refactoring to create smaller components rather than just focusing on each View individually
 * Cannot add products to a package in Admin mode
+* Cannot change prices of products in Admin mode
 * No security around Admin mode
 * No double-check when deleting packages
 * Does not have full accessibility (i.e. aria tags for everything)
@@ -168,6 +169,7 @@ easy to start with.
 * Revisiting Home by changing the URL in the browser will result in loss of cart information. Pressing Back works fine. You can use this bug to reset your cart to start a different test case
 * No automated tests. Needs things like Selenium tests to make sure things are displayed correctly
 * Promises should have error logging
+* Long strings will not truncate if they cannot wrap
 
 # Manual test cases
 ## Home
@@ -177,8 +179,9 @@ easy to start with.
   * Deleting search will undo filter
 * Sorting
   * Check all sort options work
-* Details
+* Navigation
   * Check package info is accessible via button (and is correct for that package)
+  * Check pressing Home button does not cause a log error (can't navigate to same page)
 * Basket
   * Check package can be added to cart via button
   * Check basket value updates when package is added
@@ -192,7 +195,7 @@ easy to start with.
 * Info
   * Check cart shows items added from other screens
   * Check cart shows Name, Individual price and Quantity of package
-  * Check message is shown if no items are present in cart
+  * Check message is shown if no items are present in cart ("Nothing in basket")
   * Check Total displays correct value
 * Navigation
   * Check pressing Basket button does not cause a log error (can't navigate to same page)
@@ -206,8 +209,9 @@ easy to start with.
     * Check Total shows reason for discount
 ## Header
 * Contents
-  * Check has title, Admin button, Currency selection, Basket button
+  * Check has Home button, Admin button, Title, Currency selection, Basket button
 * Navigation
+  * Check Home button takes you to index
   * Check Admin button takes you to Admin page
   * Check Basket button takes you to Basket page
 * Events
@@ -224,7 +228,7 @@ easy to start with.
 * Info
   * Check Id, Name, Description, Update button and Delete button shown
 * Navigation
-  * Check Update button takes you to Package edit view
+  * Check Update button takes you to Package edit view for that package
   * Check Add button takes you to New package view
 * State
   * Check delete deletes the package
@@ -244,6 +248,9 @@ easy to start with.
 * Storage
   * Check Save button saves package to Backend AND navigates you back to Admin page
   * Check package is saved with correct information
+  * Check newly added packages can be added to cart (they will have 0 products so will cost nothing)
+  * Check newly added packages can be updated
+  * Check newly added packages can be deleted
 ## Update package view (reachable via Update button on Admin page)
 * Info
   * Check Id, Name, Description and Products are viewable
