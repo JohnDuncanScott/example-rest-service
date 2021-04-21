@@ -31,7 +31,7 @@
             </button>
           </div>
         </div>
-        <div class="d-flex text-center h2">Saruman's Store</div>
+        <div class="text-center h2">Saruman's Store</div>
         <div class="d-flex">
           <div class="pe-1">
             <select class="form-select" aria-label="Currency selection" v-model="currencyCodeFromDropdown" @change="onCurrencyChange()">
