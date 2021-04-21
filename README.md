@@ -158,7 +158,7 @@ easy to start with.
 * Thread safety has not been tested
 
 ## Frontend
-* The styling works for desktop for customer facing pages. However, they do not look nice when resizing, although the page is functional. The admin pages are not well styled.
+* The styling works for desktop for customer facing pages. However, they do not look nice when resizing, although the pages are functional - need to add proper breakpoints to make this work for mobile
 * Code duplication in certain areas, needs some refactoring to create smaller components rather than just focusing on each View individually
 * Cannot add products to a package in Admin mode
 * Cannot change prices of products in Admin mode
