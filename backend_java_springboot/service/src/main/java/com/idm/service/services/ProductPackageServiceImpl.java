@@ -55,7 +55,7 @@ public class ProductPackageServiceImpl implements ProductPackageService {
         ProductPackageInstant productPackage = getById(packageId, currency);
 
         if (productPackage != null) {
-            return productPackage.getProductPackage().getProductIds().stream()
+            return productPackage.getProductPackage().getProductIdToQuantityMap().keySet().stream()
                     .map(productId -> productService.getById(productId))
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
@@ -72,7 +72,7 @@ public class ProductPackageServiceImpl implements ProductPackageService {
         ProductPackageInstant productPackageInstant = getById(packageId, currency);
 
         if (productPackageInstant != null) {
-            if (!productPackageInstant.getProductPackage().getProductIds().contains(productId)) {
+            if (!productPackageInstant.getProductPackage().getProductIdToQuantityMap().containsKey(productId)) {
                 log.info("Could not find product id '{}' in package with id '{}'", productId, packageId);
                 return null;
             }
@@ -111,19 +111,29 @@ public class ProductPackageServiceImpl implements ProductPackageService {
     }
 
     // TODO: Pricing concerns and conversions should probably be in a separate class since you don't necessarily
-    // need to do an exchange unless you're displaying to the customer
+    // need to do an exchange unless you're displaying to the customer. The usually pattern is to have some kind of
+    // "pricing engine" that would deal with this and the Decorator pattern is quite common for wrapping extra layers
+    // of conversion. This would probably be interface based (something like "Priceable") so it could work across
+    // any object with a price
     private ProductPackageInstant toProductPackageInstant(ProductPackage productPackage, Currency localCurrency) {
-        List<Product> products = productPackage.getProductIds().stream()
+        // Hydrate products from ids so we can check the mappings and extract pricing information at this point in time
+        List<Product> products = productPackage.getProductIdToQuantityMap().keySet().stream()
                 .map(productId -> productService.getById(productId))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        if (products.size() != productPackage.getProductIds().size()) {
-            throw new IllegalStateException("Product package has products which cannot be found, id: " + productPackage.getId());
+        if (products.size() != productPackage.getProductIdToQuantityMap().size()) {
+            throw new IllegalStateException(
+                    "Product package has products which cannot be found, id: " + productPackage.getId());
         }
 
         BigDecimal totalUsdPrice = products.stream()
-                .map(Product::getUsdPrice)
+                .map(p -> p.getUsdPrice()
+                        .multiply(
+                                BigDecimal.valueOf(
+                                        productPackage.getProductIdToQuantityMap()
+                                                .get(p.getId())
+                                                .getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return new ProductPackageInstant(

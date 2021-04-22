@@ -1,17 +1,18 @@
 package com.idm.service.models.data;
 
-import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-// TODO: For simplicity, a package can only contain a unique set of products
 // TODO: Add full unit tests
 @Value
 public class ProductPackage {
@@ -22,7 +23,7 @@ public class ProductPackage {
     private String id;
     @NonNull private String name;
     @NonNull private String description;
-    @NonNull private Set<String> productIds;
+    @NonNull private Map<String, ProductWithQuantity> productIdToQuantityMap;
 
     // Use when creating a fresh object that will later have its id populated and associated data populated
     public ProductPackage(@NonNull String name, @NonNull String description) {
@@ -31,15 +32,30 @@ public class ProductPackage {
 
         this.name = name;
         this.description = description;
-        this.productIds = ImmutableSet.of();
+        this.productIdToQuantityMap = new HashMap<>();
     }
 
-    // Standard constructor for most use cases
+    // Constructor for easy setup
     public ProductPackage(
             @NonNull String id,
             @NonNull String name,
             @NonNull String description,
-            @NonNull Set<String> productIds) {
+            @NonNull List<ProductWithQuantity> productIdToQuantityMap) {
+        this(
+                id,
+                name,
+                description,
+                productIdToQuantityMap
+                    .stream()
+                    .collect(Collectors.toMap(ProductWithQuantity::getProductId, pq -> pq)));
+    }
+
+    // Constructor for cloning
+    public ProductPackage(
+            @NonNull String id,
+            @NonNull String name,
+            @NonNull String description,
+            @NonNull Map<String, ProductWithQuantity> productIdToQuantityMap) {
         checkNotBlank(id, "id");
         checkNotBlank(name, "name");
         checkNotBlank(description, "description");
@@ -47,7 +63,7 @@ public class ProductPackage {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.productIds = ImmutableSet.copyOf(productIds);
+        this.productIdToQuantityMap = productIdToQuantityMap;
     }
 
     private void checkNotBlank(String value, String argumentName) {

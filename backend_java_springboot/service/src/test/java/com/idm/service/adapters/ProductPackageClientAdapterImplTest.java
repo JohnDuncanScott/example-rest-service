@@ -91,7 +91,7 @@ class ProductPackageClientAdapterImplTest {
                 originalProductPackage.getId(),
                 newName,
                 originalProductPackage.getDescription(),
-                originalProductPackage.getProductIds()
+                originalProductPackage.getProductIdToQuantityMap()
         );
 
         ProductPackage actualProductPackage = productPackageClientAdapter.save(updatedProductPackage);

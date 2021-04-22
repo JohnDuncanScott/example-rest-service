@@ -3,8 +3,9 @@ package com.idm.service.assemblers;
 import com.idm.service.controllers.ProductPackageController;
 import com.idm.service.models.data.ProductPackage;
 import com.idm.service.models.data.ProductPackageInstant;
+import com.idm.service.models.data.ProductWithQuantity;
 import com.idm.service.models.resources.ProductPackageResource;
-import com.idm.service.models.resources.ProductResource;
+import com.idm.service.models.resources.ProductWithQuantityResource;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -34,7 +35,7 @@ public class ProductPackageResourceAssembler
 
     // TODO: Not sure if architecturally this is the right place for it, but it's easy to find and with other similar
     // methods. Should maybe be in "ProductPackageAssembler" although that might be overkill
-    // Will handle both new objects that need creating and transferring data from existing ones
+    // Will handle both new objects that need creating and transferring data from existing ones.
     public ProductPackage fromModel(
             @NonNull ProductPackageResource productPackageResource,
             @Nullable ProductPackageInstant originalProductPackageInstant) {
@@ -51,7 +52,9 @@ public class ProductPackageResourceAssembler
                     originalProductPackageInstant.getProductPackage().getId(),
                     productPackageResource.getName(),
                     productPackageResource.getDescription(),
-                    productPackageResource.getProducts().stream().map(p -> p.getId()).collect(Collectors.toSet())
+                    productPackageResource.getProductsWithQuantity().stream()
+                            .map(pwq -> new ProductWithQuantity(pwq.getId(), pwq.getQuantity()))
+                            .collect(Collectors.toList())
             );
         } else {
             return new ProductPackage(
@@ -87,12 +90,13 @@ public class ProductPackageResourceAssembler
         ProductPackage productPackage = productPackageInstant.getProductPackage();
 
         // TODO: Should have a separate assembler with their own self links probably?
-        List<ProductResource> productResources = productPackageInstant.getProducts().stream()
-                .map(p -> new ProductResource(
+        List<ProductWithQuantityResource> productWithQuantityResources = productPackageInstant.getProducts().stream()
+                .map(p -> new ProductWithQuantityResource(
                         p.getId(),
                         p.getName(),
                         productPackageInstant.getLocalCurrency(),
-                        productPackageInstant.getProductLocalPrice(p)))
+                        productPackageInstant.getProductLocalPrice(p),
+                        productPackage.getProductIdToQuantityMap().get(p.getId()).getQuantity()))
                 .collect(Collectors.toList());
 
         return new ProductPackageResource(
@@ -101,6 +105,6 @@ public class ProductPackageResourceAssembler
                 productPackage.getDescription(),
                 productPackageInstant.getLocalCurrency(),
                 productPackageInstant.getTotalLocalPrice(),
-                productResources);
+                productWithQuantityResources);
     }
 }

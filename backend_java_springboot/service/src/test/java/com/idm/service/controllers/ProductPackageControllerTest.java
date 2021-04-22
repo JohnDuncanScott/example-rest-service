@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableSet;
 import com.idm.service.models.data.Product;
 import com.idm.service.models.data.ProductPackage;
 import com.idm.service.models.data.ProductPackageInstant;
+import com.idm.service.models.data.ProductWithQuantity;
 import com.idm.service.models.resources.ProductPackageResource;
 import com.idm.service.services.ProductPackageService;
 import org.junit.jupiter.api.Test;
@@ -41,13 +42,14 @@ class ProductPackageControllerTest {
     private static final Currency GBP = Currency.getInstance("GBP");
     private static final String PRODUCT_ID = "productId";
     private static final Product PRODUCT = new Product(PRODUCT_ID, "productName", BigDecimal.TEN);
+    private static final ProductWithQuantity PRODUCT_WITH_QUANTITY = new ProductWithQuantity(PRODUCT_ID, 2);
     private static final List<Product> PRODUCTS = ImmutableList.of(PRODUCT);
     private static final String PACKAGE_ID = "packageId";
     private static final ProductPackage PRODUCT_PACKAGE = new ProductPackage(
             PACKAGE_ID,
             "packageName",
             "packageDescription",
-            ImmutableSet.of(PRODUCT_ID));
+            ImmutableList.of(PRODUCT_WITH_QUANTITY));
     private static final ProductPackageInstant PRODUCT_PACKAGE_INSTANT_USD = new ProductPackageInstant(
             PRODUCT_PACKAGE,
             PRODUCTS,

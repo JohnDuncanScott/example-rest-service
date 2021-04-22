@@ -1,18 +1,17 @@
 package com.idm.service.services;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.idm.service.adapters.ProductPackageClientAdapter;
 import com.idm.service.assertions.AssertMessages;
 import com.idm.service.models.data.Product;
 import com.idm.service.models.data.ProductPackage;
 import com.idm.service.models.data.ProductPackageInstant;
+import com.idm.service.models.data.ProductWithQuantity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.verification.VerificationMode;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -33,12 +32,13 @@ class ProductPackageServiceImplTest {
     private static final BigDecimal GBP_EXCHANGE_RATE = BigDecimal.TEN;
     private static final Product PRODUCT1 = new Product("productId1", "productName1", BigDecimal.TEN);
     private static final Product PRODUCT2 = new Product("productId2", "productName2", BigDecimal.TEN);
-    private static final List<Product> PRODUCTS = ImmutableList.of(PRODUCT1, PRODUCT2);
+    private static final ProductWithQuantity PRODUCT_WITH_QUANTITY1 = new ProductWithQuantity(PRODUCT1.getId(), 1);
+    private static final ProductWithQuantity PRODUCT_WITH_QUANTITY2 = new ProductWithQuantity(PRODUCT2.getId(), 2);
     private static final ProductPackage PRODUCT_PACKAGE = new ProductPackage(
             "packageId",
             "packageName",
             "packageDescription",
-            ImmutableSet.of(PRODUCT1.getId(), PRODUCT2.getId()));
+            ImmutableList.of(PRODUCT_WITH_QUANTITY1, PRODUCT_WITH_QUANTITY2));
     private ProductPackageService productPackageService;
 
     @Mock
@@ -59,6 +59,9 @@ class ProductPackageServiceImplTest {
                 .thenReturn(ImmutableList.of(PRODUCT_PACKAGE));
         lenient()
                 .when(productPackageClientAdapter.getById(PRODUCT_PACKAGE.getId()))
+                .thenReturn(PRODUCT_PACKAGE);
+        lenient()
+                .when(productPackageClientAdapter.save(PRODUCT_PACKAGE))
                 .thenReturn(PRODUCT_PACKAGE);
         lenient()
                 .when(exchangeRateService.getExchangeRateForUsdTo(USD))
@@ -90,11 +93,11 @@ class ProductPackageServiceImplTest {
 
         assertThat(productPackageInstant, notNullValue());
         assertThat("Product package should match", productPackageInstant.getProductPackage(), equalTo(PRODUCT_PACKAGE));
-        assertThat("Products should match", productPackageInstant.getProducts(), equalTo(PRODUCTS));
+        assertThat("Products should match", productPackageInstant.getProducts(), containsInAnyOrder(PRODUCT1, PRODUCT2));
         assertThat(
                 "Total price should be correct",
                 productPackageInstant.getTotalUsdPrice(),
-                equalTo(PRODUCT1.getUsdPrice().add(PRODUCT2.getUsdPrice())));
+                equalTo(BigDecimal.valueOf(30)));
         assertThat(
                 "Local currency should be correct",
                 productPackageInstant.getLocalCurrency(),
@@ -160,7 +163,7 @@ class ProductPackageServiceImplTest {
         List<Product> products = productPackageService.getProductsForPackage(PRODUCT_PACKAGE.getId(), USD);
 
         assertThat(products, notNullValue());
-        assertThat(products, equalTo(PRODUCTS));
+        assertThat(products, containsInAnyOrder(PRODUCT1, PRODUCT2));
     }
 
     @Test

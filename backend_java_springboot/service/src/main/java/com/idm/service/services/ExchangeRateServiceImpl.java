@@ -2,6 +2,7 @@ package com.idm.service.services;
 
 import com.idm.service.adapters.ExchangeRateClientAdapter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,12 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class ExchangeRateServiceImpl implements ExchangeRateService {
     private static final Currency USD = Currency.getInstance("USD");
     // TODO: Need TTL cache
     private final Map<Currency, BigDecimal> currencyCache = new HashMap<>();
-
-    @Inject
-    private ExchangeRateClientAdapter exchangeRateClientAdapter;
+    private final ExchangeRateClientAdapter exchangeRateClientAdapter;
 
     @Override
     public BigDecimal getExchangeRateForUsdTo(@NonNull Currency currency) {

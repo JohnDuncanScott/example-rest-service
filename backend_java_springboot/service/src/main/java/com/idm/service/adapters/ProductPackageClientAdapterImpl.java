@@ -2,11 +2,15 @@ package com.idm.service.adapters;
 
 import com.google.common.collect.ImmutableList;
 import com.idm.service.models.data.ProductPackage;
+import com.idm.service.models.data.ProductWithQuantity;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -20,19 +24,23 @@ public class ProductPackageClientAdapterImpl implements ProductPackageClientAdap
                 "Armor package",
                 "An assortment of armor to get your new character started.",
                 // Shield (Helmet excluded)
-                new HashSet<>(Arrays.asList("VqKb4tyj9V6i")));
+                Arrays.asList(new ProductWithQuantity("VqKb4tyj9V6i", 1)));
         ProductPackage weaponsPackage = new ProductPackage(
                 Integer.toString(++idCounter),
                 "Weapons package",
                 "An assortment of weapons to get your new character started.",
                 // Sword, Axe (Knife & Bow excluded)
-                new HashSet<>(Arrays.asList("7dgX6XzU3Wds", "PKM5pGAh9yGm")));
+                Arrays.asList(
+                        new ProductWithQuantity("7dgX6XzU3Wds", 1),
+                        new ProductWithQuantity("PKM5pGAh9yGm", 1)));
         ProductPackage currencyPackage = new ProductPackage(
                 Integer.toString(++idCounter),
                 "Currency package",
                 "An assortment of currency to get your new character started.",
                 // Gold, Silver (Platinum excluded)
-                new HashSet<>(Arrays.asList("500R5EHvNlNB", "8anPsR2jbfNW")));
+                Arrays.asList(
+                        new ProductWithQuantity("500R5EHvNlNB", 1),
+                        new ProductWithQuantity("8anPsR2jbfNW", 1)));
         productPackagesMap.put(armorPackage.getId(), armorPackage);
         productPackagesMap.put(weaponsPackage.getId(), weaponsPackage);
         productPackagesMap.put(currencyPackage.getId(), currencyPackage);
@@ -61,7 +69,7 @@ public class ProductPackageClientAdapterImpl implements ProductPackageClientAdap
                     Integer.toString(++idCounter),
                     productPackage.getName(),
                     productPackage.getDescription(),
-                    productPackage.getProductIds()
+                    productPackage.getProductIdToQuantityMap()
             );
             productPackagesMap.put(newProductPackage.getId(), newProductPackage);
             log.info("Added new product package: {}", newProductPackage);
