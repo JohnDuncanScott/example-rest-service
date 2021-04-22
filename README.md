@@ -100,7 +100,7 @@ easy to start with.
 # Instructions
 ## Requirements
 * Install [Java Development Kit 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) for your platform
-* Install [nodejs](https://nodejs.org/en/) for your platform
+* Install [nodejs v15.14.0](https://nodejs.org/en/)
   
 ## Backend
 * Open folder **backend_java_springboot** in IntelliJ and let it import the Maven project

@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class ProductServiceImpl implements ProductService {
-    @Inject
     private final ProductClientAdapter productClientAdapter;
 
     @Override

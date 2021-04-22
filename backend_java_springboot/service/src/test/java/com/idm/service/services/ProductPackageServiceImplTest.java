@@ -61,6 +61,9 @@ class ProductPackageServiceImplTest {
                 .when(productPackageClientAdapter.getById(PRODUCT_PACKAGE.getId()))
                 .thenReturn(PRODUCT_PACKAGE);
         lenient()
+                .when(productPackageClientAdapter.save(PRODUCT_PACKAGE))
+                .thenReturn(PRODUCT_PACKAGE);
+        lenient()
                 .when(exchangeRateService.getExchangeRateForUsdTo(USD))
                 .thenReturn(USD_EXCHANGE_RATE);
         lenient()
