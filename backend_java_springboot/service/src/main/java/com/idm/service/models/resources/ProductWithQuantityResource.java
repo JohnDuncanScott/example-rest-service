@@ -1,15 +1,20 @@
-Unstaged changes after reset:
-M	README.md
-M	backend_java_springboot/service/src/main/java/com/idm/service/adapters/ProductPackageClientAdapterImpl.java
-M	backend_java_springboot/service/src/main/java/com/idm/service/assemblers/ProductPackageResourceAssembler.java
-M	backend_java_springboot/service/src/main/java/com/idm/service/models/data/ProductPackage.java
-M	backend_java_springboot/service/src/main/java/com/idm/service/models/resources/ProductPackageResource.java
-D	backend_java_springboot/service/src/main/java/com/idm/service/models/resources/ProductResource.java
-M	backend_java_springboot/service/src/main/java/com/idm/service/models/resources/ProductWithQuantityResource.java
-M	backend_java_springboot/service/src/main/java/com/idm/service/services/ExchangeRateServiceImpl.java
-M	backend_java_springboot/service/src/main/java/com/idm/service/services/ProductPackageServiceImpl.java
-M	backend_java_springboot/service/src/main/java/com/idm/service/services/ProductServiceImpl.java
-M	backend_java_springboot/service/src/test/java/com/idm/service/adapters/ProductPackageClientAdapterImplTest.java
-M	backend_java_springboot/service/src/test/java/com/idm/service/controllers/ProductPackageControllerTest.java
-M	backend_java_springboot/service/src/test/java/com/idm/service/services/ExchangeRateServiceImplTest.java
-M	backend_java_springboot/service/src/test/java/com/idm/service/services/ProductPackageServiceImplTest.java
+package com.idm.service.models.resources;
+
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
+
+import java.math.BigDecimal;
+import java.util.Currency;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class ProductWithQuantityResource extends RepresentationModel<ProductWithQuantityResource> {
+    // A null id indicates an id needs to be generated
+    private String id;
+    @NonNull private String name;
+    @NonNull private Currency localCurrency;
+    @NonNull private BigDecimal localPrice;
+    private int quantity;
+}
