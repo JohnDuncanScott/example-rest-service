@@ -269,3 +269,121 @@ easy to start with.
   * Check updating a package that's in the cart updates the cart item on navigation
 ## Exploratory testing
 * Open Developer tools and navigate around website, keeping an eye out for interesting logs and errors
+
+# Steps to productionize
+## Backend
+* ExchangeRateClientAdapterImpl
+  * Add unit tests
+  * Query common currencies all in 1 request to avoid multiple trips
+  * Move access key to a secure secrets store (e.g. (AWS Secrets Manager)[https://aws.amazon.com/secrets-manager/]) (or at least a props file)
+  * Create proper model for API response
+  * Don't swallow all exceptions
+* ProductClientAdapterImpl
+  * Add unit tests
+  * Inject ObjectMapper
+  * Move cache to parent service, doesn't belong in adapter. Also use proper cache with TTL (e.g. (Guava cache)[https://www.baeldung.com/guava-cache])
+  * Move user name and password to a secure secrets store (e.g. (AWS Secrets Manager)[https://aws.amazon.com/secrets-manager/]) (or at least a props file)
+* ProductPackageClientAdapterImpl
+  * Move product package definitions to a database and read / write using (Spring Data JPA + Hibernate)[https://www.baeldung.com/the-persistence-layer-with-spring-and-jpa] or similar. Use auto-incrementing id for product package id
+* ProductPackageResourceAssembler
+  * Add full unit tests
+  * Replace "@Nullable ProductPackageInstant originalProductPackageInstant" with Optional
+  * Fix self link with param hack properly
+* ProductController
+  * Make HATEOS / HAL compliant
+  * Use different model for return values
+* ProductPackageController
+  * Setup proper error page
+  * Inject ProductPackageResourceAssembler
+  * Replace optional params with Optionals
+  * Auto-convert currency params to Currency instances
+* Models
+  * Add unit tests
+  * Check backend and frontend validation matches up
+* ExchangeRateServiceImpl
+  * Use proper cache with TTL (e.g. (Guava cache)[https://www.baeldung.com/guava-cache])
+  * If backup currency conversion were to be kept, this would be more maintainable as a Map rather than a switch statement. Already have a cache, so could just populate with defaults
+* ProductPackageServiceImpl
+  * Use Optional rather than returning null, would make API much cleaner
+  * Separate out price conversions to a different class
+* ProductServiceImpl
+  * Use Optional rather than returning null, would make API much cleaner
+  * Should be using a DTO and not leaking the Product model higher up the stack
+* General
+  * Number of packages will grow, so should use paging properly in REST API - (PagedResourcesAssembler)[https://stackoverflow.com/questions/21346387/how-to-correctly-use-pagedresourcesassembler-from-spring-data]
+  * Packages and Products should have an audit history and should be able to rollback to a previous version
+  * Use constructor injection where missing (`@RequiredArgsConstructor(onConstructor = @__(@Inject))`) (missing this in the adapters for example)
+  * Check using final where appropriate (not using it enough at the moment)
+  * JavaDocs for all the classes
+  * Add proper trackable metric counters
+  * Where appropriate, use something like (MapStruct)[https://stackabuse.com/guide-to-mapstruct-in-java-advanced-mapping-library/] for DTO mapping. Also see (performance of mapping frameworks)[https://www.baeldung.com/java-performance-mapping-frameworks]
+  * Convert money handling to use (org.javamoney)[https://www.baeldung.com/java-money-and-currency]
+  * Auto-generate documentation using (Spring REST Docs)[https://www.baeldung.com/spring-rest-docs]
+  * Enforce code coverage thresholds
+  * Enable style checks (CheckStyle)
+  * Enable static analysis checks (FindBugs)
+  * Add functional tests (headless + tailess tests)
+  * Add integration tests
+  * Add performance tests (soak and load)
+  * Check G1 GC is being used
+  * Full CI/CD system out of scope :)
+
+## Frontend
+* BasketView
+  * Clicking on a basket item should take you to the details for it
+* ProductPackageEdit
+  * Secure editing functionality
+  * Move "new" to constant
+* ProductPackagesEdit
+  * Remove redundant ".then();"
+  * Move "new" to constant
+  * Delete should have a warning dialog
+* ProductPackagesView
+  * Move search functionality to backend. Although it works for a small number of items like this, really the search param should be passed to the backend. Also need paging. To reduce the load on the backend, search should be a positive confirmation rather than the dynamic searching that currently happens
+  * Change case-insensitive search to use toUpperCase instead of toLowerCase to avoid round-tripping problems in countries like Turkey <https://garygregory.wordpress.com/2015/11/03/java-lowercase-conversion-turkey/>
+* BasketService
+  * This is a hack to keep basket state. Would likely be a whole service that included handling purchasing. This API would either fit in there or if warranted would be its own microservice. This type of data is more suited to a NoSQL database where we want high availability and  (e.g. DynamoDb which is actually (used for Amazon Cart)[https://www.dynamodbguide.com/the-dynamo-paper])
+* UserPersonalisationService
+  * This a hack to keep user's preferred options. Would likely be its own microservice that kept track of all forms of user preferences
+* General
+  * JavaScript
+    * Add error functions to promises where appropriate
+    * Create proper types where interacting with the APIs using ES6 class functionality
+    * Add more documentation
+    * Move currency symbol and how to display to backend to reduce logic in client
+  * CSS
+    * Use (SASS or LESS)[https://templeton.io/less-vs-sass-scss-why-which/] to create cleaner and more modular stylesheets
+  * Vue
+    * Check Vue best practice documentation to make sure it's being followed
+    * Componentize some of the common buttons rather than re-declaring them
+    * Check for and fix any alignment issues
+  * Automated testing
+    * Add unit tests
+    * Enable JSLint
+    * Selenium UI tests
+    * Performance / Responsiveness tests
+  * Safety
+    * Ensure strict mode is activated
+    * Replace var with let - (var vs. let)[https://www.educba.com/javascript-var-vs-let/]
+    * Switch to TypeScript
+  * Security
+    * Would of course need a login for user
+    * Admin website should be completely independent to retail website
+  * Performance
+    * Use Audit functionality in Dev Tools to assess website
+    * Make sure text compression is enabled
+    * Enable minification
+    * No images in this project, but you'd also make sure the correct image sizes were being used
+  * Localisation
+    * Check time formats, money formats, etc.
+    * Check no hardcoded user facing strings - should only use constants that map to localised values. Can also use (pseudolocalisation)[https://en.wikipedia.org/wiki/Pseudolocalization] to help detect problems
+  * Compatibility
+    * Check compatibility across browsers
+    * Check breakpoints for site to ensure displays fine on mobile
+    * Check on selection of real devices as a safety check (can use some kind of device farm, e.g. (AWS Device Farm)[https://aws.amazon.com/device-farm/])
+  * Accessibility
+    * Check accessibility - aria tags, use screen reader to tab through and check it makes sense
+    * Use (colour contrast tool)[<https://snook.ca/technical/colour_contrast/colour.html>] to check colours picked are good 
+    * Check (colour blindness)[http://www.particletree.com/features/interfaces-and-color-blindness/>]
+    * Check (WCAG guidelines)[<https://www.w3.org/WAI/standards-guidelines/wcag/glance/>]
+    * Use something like (NoCoffee)[https://accessgarage.wordpress.com/2013/02/09/458/] to test the website
