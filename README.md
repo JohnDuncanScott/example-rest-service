@@ -342,7 +342,7 @@ easy to start with.
   * Move search functionality to backend. Although it works for a small number of items like this, really the search param should be passed to the backend. Also need paging. To reduce the load on the backend, search should be a positive confirmation rather than the dynamic searching that currently happens
   * Change case-insensitive search to use toUpperCase instead of toLowerCase to avoid round-tripping problems in countries like Turkey <https://garygregory.wordpress.com/2015/11/03/java-lowercase-conversion-turkey/>
 * BasketService
-  * This is a hack to keep basket state. Would likely be a whole service that included handling purchasing. This API would either fit in there or if warranted would be its own microservice. This type of data is more suited to a NoSQL database where we want high availability and  (e.g. DynamoDb which is actually [used for Amazon Cart](https://www.dynamodbguide.com/the-dynamo-paper))
+  * This is a hack to keep basket state. Would likely be a whole service that included handling purchasing. This API would either fit in there or if warranted would be its own microservice. This type of data is more suited to a NoSQL database where we want high availability (e.g. DynamoDb which is actually [used for Amazon Cart](https://www.dynamodbguide.com/the-dynamo-paper))
 * UserPersonalisationService
   * This a hack to keep user's preferred options. Would likely be its own microservice that kept track of all forms of user preferences
 * General
@@ -351,6 +351,7 @@ easy to start with.
     * Create proper types where interacting with the APIs using ES6 class functionality
     * Add more documentation
     * Move currency symbol and how to display to backend to reduce logic in client
+    * Add proper trackable metric counters
   * CSS
     * Use [SASS or LESS](https://templeton.io/less-vs-sass-scss-why-which/) to create cleaner and more modular stylesheets
   * Vue
