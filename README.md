@@ -32,7 +32,7 @@ easy to start with.
     * <https://medium.com/pilcro/should-you-use-material-design-bfb596a04bae>
     * <https://medium.com/the-web-tub/choosing-the-right-front-end-framework-for-your-vue-app-4448bac12ce7>
     * **Bootstrap** specific:
-      * (How does Bootstrap 5 Spacing work?)[https://www.youtube.com/watch?v=7IBbewitYxA]
+      * [How does Bootstrap 5 Spacing work?](https://www.youtube.com/watch?v=7IBbewitYxA)
    * Conclusion: For quick prototyping and flexibility, **Bootstrap** seems best choice
 * Frontend
   * As a result of picking **Vue** and **Bootstrap**, there are more options:
