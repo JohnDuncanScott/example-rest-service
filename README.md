@@ -1,8 +1,7 @@
 # ExampleRestService
-This project showcases a simple REST service.
-I have not done significant web development work, so this is mainly
-a learning project for me to look at the many options and pick something
-easy to start with.
+This project showcases a simple REST service. Mainly a learning project to put together something fullstack with best practices, as far as possible.
+
+If you enjoy this project, please consider [:hearts: buying me a beer :beer: :hearts:](https://johnduncanscott.github.io/personal-website/#/tip) and starring :star: the project. My [**personal website**](http://johnduncanscott.github.io/personal-website/) for the curious.
 
 # Tech rationales
 * Build system
