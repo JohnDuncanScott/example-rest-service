@@ -113,6 +113,7 @@ If you enjoy this project, please consider [:hearts: buying me a beer :beer: :he
 
 ## Frontend
 * `cd frontend_vue_bootstrap`
+* Run `nvm use 15.14.0` (.nvmrc file doesn't work on Windows)
 * Run `npm install`
 * Run `npm run serve`
 * Open `http://localhost:8081/` to see the Home page. You won't see any packages unless the backend is up and running

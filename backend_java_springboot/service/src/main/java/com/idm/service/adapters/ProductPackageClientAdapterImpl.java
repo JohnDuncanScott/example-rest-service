@@ -20,19 +20,19 @@ public class ProductPackageClientAdapterImpl implements ProductPackageClientAdap
                 "Armor package",
                 "An assortment of armor to get your new character started.",
                 // Shield (Helmet excluded)
-                new HashSet<>(Arrays.asList("VqKb4tyj9V6i")));
+                new HashSet<>(Arrays.asList("shield")));
         ProductPackage weaponsPackage = new ProductPackage(
                 Integer.toString(++idCounter),
                 "Weapons package",
                 "An assortment of weapons to get your new character started.",
                 // Sword, Axe (Knife & Bow excluded)
-                new HashSet<>(Arrays.asList("7dgX6XzU3Wds", "PKM5pGAh9yGm")));
+                new HashSet<>(Arrays.asList("sword", "axe")));
         ProductPackage currencyPackage = new ProductPackage(
                 Integer.toString(++idCounter),
                 "Currency package",
                 "An assortment of currency to get your new character started.",
                 // Gold, Silver (Platinum excluded)
-                new HashSet<>(Arrays.asList("500R5EHvNlNB", "8anPsR2jbfNW")));
+                new HashSet<>(Arrays.asList("gold", "silver")));
         productPackagesMap.put(armorPackage.getId(), armorPackage);
         productPackagesMap.put(weaponsPackage.getId(), weaponsPackage);
         productPackagesMap.put(currencyPackage.getId(), currencyPackage);
