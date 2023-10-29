@@ -3,6 +3,8 @@ This project showcases a simple REST service. Mainly a learning project to put t
 
 If you enjoy this project, please consider [:hearts: buying me a beer :beer: :hearts:](https://johnduncanscott.github.io/#/tip) and starring :star: the project. My [**personal website**](http://johnduncanscott.github.io) for the curious.
 
+![Screenshot](https://johnduncanscott.github.io/assets/projects/example-rest-service_wide.png)
+
 # Tech rationales
 * Build system
   * **Maven** - Mature build system, can find a lot of tutorials for it,
